@@ -53,26 +53,28 @@ font-size: 20px;
 
 const Field = ({label, placeholder, isFirstField, isLastField, value, name, onInputChange, isSelect, children, isMultiple, inputs, onDeleteWrongAnswer, onAddWrongAnswer }) => {
 
-    const onValueChange = ( value, index, fromMultiple ) => {
+    const onValueChange = ( value, id ) => {
 
-        let inputData;
-        if (fromMultiple){
+        let inputData
+
+        if (  id ) {
             inputData = {
                 value,
                 name,
-                index
+                id
             }
         } else {
-            inputData ={
+            inputData = {
                 value,
                 name
             }
         }
+        //console.log(inputData)
         onInputChange(inputData)
     }
 
-    const onDeletePressed = (index) => {
-        onDeleteWrongAnswer(index)
+    const onDeletePressed = (id) => {
+        onDeleteWrongAnswer(id)
     }
 
     const onAddWrongAnswerPressed = () => {
@@ -81,12 +83,11 @@ const Field = ({label, placeholder, isFirstField, isLastField, value, name, onIn
     return(
 
         <FieldWrap isFirstField={isFirstField ? true : null} isLastField={isLastField ? true : null}>
-            <Label>{label}</Label>
+            <Label>{label.toUpperCase()}</Label>
             { isSelect ?
                 children
                 :
                 <Input
-                    name={name}
                     multiline={true}
                     placeholder={placeholder}
                     onChangeText={(value) => onValueChange(value)}
@@ -102,12 +103,13 @@ const Field = ({label, placeholder, isFirstField, isLastField, value, name, onIn
                         <InputIconWrap key={index}>
                               <Input
                                   multiline={true}
-                                  onChangeText={(value) => onValueChange(value, index, true)}
-                                  value={item}
+                                  onChangeText={(value) => onValueChange(value, item.id)}
+                                  value={item.text}
                                   style={{flex: 5}}
                                   onSubmitEditing={Keyboard.dismiss}
+                                  autoFocus={item.isFocused}
                                 />
-                             <SquareIcon onPress={() => onDeletePressed(index)}><SquareIconText>-</SquareIconText></SquareIcon>
+                             <SquareIcon onPress={() => onDeletePressed(item.id)}><SquareIconText>-</SquareIconText></SquareIcon>
                           </InputIconWrap>
                     ))
                 ),

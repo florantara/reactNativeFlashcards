@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
-    AsyncStorage,
     StyleSheet,
+    TouchableOpacity,
+    Text
 } from 'react-native';
 
 import Layout from '../components/Layout'
@@ -11,11 +12,11 @@ import {
     DATA_STORAGE_KEY,
     setInitialData,
     getDecks
-} from '../utils/data'
+} from '../utils/api'
 
 class DecksScreen extends Component{
-    state ={
-        decks: []
+    state = {
+        decks: {}
     }
 
     getData = async () => {
@@ -36,21 +37,23 @@ class DecksScreen extends Component{
     componentDidMount(){
         this.getData()
     }
-    render(){
 
+    updateDecks = () => {
+        this.getData()
+    }
+    render(){
         const { decks } = this.state
-        //console.log({decks})
         return(
             <Layout>
-                { decks && decks.map( deck => (
-
+                { decks && Object.values(decks).map( deck => (
                     <Deck
                         key={deck.id}
                         color={deck.color}
                         title={deck.title}
                         cards={deck.cards} />)
                 )
-            }
+                }
+                <TouchableOpacity onPress={this.updateDecks}><Text>Update Decks</Text></TouchableOpacity>
             </Layout>
         )
     }

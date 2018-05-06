@@ -2,50 +2,23 @@ import React, { Component } from 'react'
 import {
     Text,
     View,
-    StyleSheet,
     TextInput,
-    FlatList,
-    Modal,
     TouchableOpacity,
-    Animated,
-    Easing,
     ScrollView,
     KeyboardAvoidingView
-
-
 } from 'react-native'
+
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { pink, green, gray, lightgray, lightgreen } from '../utils/colors'
 import styled from 'styled-components/native'
 
 import Field from '../components/Field'
+import ModalSelectDecks from '../components/ModalSelectDecks'
 
-const allDecks = [
-    {
-        title: 'JavaScript',
-        key: 1
-    },
-    {
-        title: 'HTML',
-        key: 2
-    },
-    {
-        title: 'CSS',
-        key: 3
-    },
-    {
-        title: 'ReactJS',
-        key: 4
-    },
-    {
-        title: 'WordPress',
-        key: 5
-    },
-    {
-        title: 'PHP',
-        key: 6
-    }
-]
+import {
+    DATA_STORAGE_KEY,
+    addCardToDeck
+} from '../utils/api'
 
 const Container = styled.View`
     padding: 0 40px 40px;
@@ -54,7 +27,7 @@ const Container = styled.View`
 const Select = styled.Text`
     height: 45px;
     width: 100%;
-    font-size: 17px;
+    font-size: 15px;
     padding-top: 15px
 `
 
@@ -66,35 +39,8 @@ const SubmitButton = styled.TouchableOpacity`
     width: 100%;
 `
 
-const ModalContainer = Animated.createAnimatedComponent(styled.View`
-    background-color: white;
-    border-radius: 10px;
-    width: 100%;
-    margin-top: 100px;
-    position: absolute;
-    top: 0px;
-    height: 100%;
-    shadow-color: black;
-    shadow-opacity: 0.4;
-    shadow-radius: 20px;
-`)
 
-const ModalListItem = styled.TouchableOpacity`
-    border-color: ${lightgray};
-    border-bottom-width: 1px;
-    border-top-width: 0;
-    border-left-width: 0;
-    border-right-width: 0;
-    margin: 0 30px;
-`
-const ModalListItemText = styled.Text`
-    font-size: 23px;
-    flex: 1;
-    padding-top: 30px;
-    padding-bottom: 30px;
-`
-
-class CreateCard extends Component {
+export default class CreateCard extends Component {
     static navigationOptions ={
         title: "New Card",
         headerTintColor: 'white',
@@ -107,53 +53,34 @@ class CreateCard extends Component {
     }
     state = {
         inputDeck: '',
+        deckID: null,
         inputQuestion: '',
         inputCorrectAnswer: '',
-        inputWrongAnswers: [
-                            "12am",
-                            "4 de la tarde",
-                            "Tercera"
-                        ],
+        inputWrongAnswers: [],
         modalVisible: false,
     }
-
-    animatedValue = new Animated.Value(0)
 
     setModalVisible(visible) {
         this.setState({
             modalVisible: visible
-        },
-            // Callback: Slide the ModalContent after the modalVisible toggle:
-            this.onModalToggle()
-        )
+        })
     }
 
-    onModalToggle(){
-        Animated.timing(
-            this.animatedValue,
-            {
-                toValue: this.state.modalVisible ? 0 : 1,
-                duration: 150,
-                easing: Easing.easeOutQuint,
-                useNativeDriver: true
-            }
-        ).start()
-    }
+    updateInput = ({value, name, id}) => {
 
-    updateInput = ({value, name, index}) => {
-
-        //console.log("updateInput index: ---------------------------", index)
-        // Multiple Inputs:
-        if ( index !== undefined){
-
-            let answers = [...this.state.inputWrongAnswers];
-            answers[index] = value
+        // When Multiple Inputs:
+        if ( id !== undefined){
             this.setState({
-                inputWrongAnswers: answers
-            });
-
-
-        // Single Input:
+                inputWrongAnswers: this.state.inputWrongAnswers.map( (answer, index) => answer.id === id ?
+                    {
+                        ...answer,
+                        text: value
+                    }
+                    :
+                    answer
+                )
+            })
+        // When Single Input:
         } else {
             this.setState({
                 [name]: value
@@ -161,54 +88,53 @@ class CreateCard extends Component {
         }
     }
 
-    selectDeck(title){
+    selectDeck(title, id){
         this.setModalVisible(false)
         this.setState({
-            inputDeck: title
+            inputDeck: title,
+            deckID: id
         })
     }
 
-    onUpdateWrongAnswers( index, value ){
-        let answers = [...this.state.inputWrongAnswers];
-        answers[index] = value
+    onDeleteWrongAnswer( id ){
         this.setState({
-            inputWrongAnswers: answers
-        });
-    }
-    onDeleteWrongAnswer( index ){
-        let answers = this.state.inputWrongAnswers;
-        answers.splice( index, 1 );
-        this.setState({
-            answers
+            inputWrongAnswers: this.state.inputWrongAnswers.filter( (answer, index) => answer.id !== id)
         })
 
     }
     onAddWrongAnswer = () => {
-        //console.log("onAddWrongAnswerPressed")
-        let answers = this.state.inputWrongAnswers
-        let newEmptyInput = ''
+        const newEmptyInput = {
+            id: Math.floor(Math.random() *  90000),
+            text: '',
+            isFocused: true
+        }
         this.setState({
             inputWrongAnswers: [
-                ...answers,
+                ...this.state.inputWrongAnswers,
                 newEmptyInput
             ]
         })
     }
 
-    render(){
-        //console.log(this.state.inputWrongAnswers)
-        const styles = StyleSheet.create({
-            slideUpDown: {
-                transform: [
-                    {
-                        translateY: this.animatedValue.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [500, 0]
-                        })
-                    }
-                ]
+    onSubmitCard = async () => {
+        const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
+
+        const newCard = {
+            question: inputQuestion,
+            answers: {
+                right: inputCorrectAnswer,
+                wrong: inputWrongAnswers.map( answer => answer.text )
             }
-        })
+
+        }
+        // console.log( "deckID: ", deckID)
+        // console.log( "inputCorrectAnswer: ", inputCorrectAnswer)
+        // console.log( "inputWrongAnswers: ", inputWrongAnswers.map( answer => answer.text ))
+        //console.log( "Card Updates: ", newCard)
+        addCardToDeck(inputDeck, newCard)
+    }
+
+    render(){
 
         const { inputDeck } = this.state
         return(
@@ -225,9 +151,17 @@ class CreateCard extends Component {
                                 label="Deck"
                             >
                                 <Select onPress={() => { this.setModalVisible(true) }}>
-                                 {inputDeck ? inputDeck : 'Select a deck'}
+                                 {inputDeck ? inputDeck : 'Select a deck '}
                                 </Select>
                             </Field>
+
+                            {/* { Select MODAL } */}
+
+                            <ModalSelectDecks
+                                isModalVisible={this.state.modalVisible}
+                                onSelectDeck={(title, id) => this.selectDeck(title, id)}
+                                onSetModalVisible={(toggle) => this.setModalVisible(toggle)}
+                            />
 
                             <Field
                                 name='inputQuestion'
@@ -254,48 +188,17 @@ class CreateCard extends Component {
                                 isMultiple
                                 inputs={this.state.inputWrongAnswers ? this.state.inputWrongAnswers : null}
                                 onInputChange={(inputData) => this.updateInput(inputData)}
-                                onDeleteWrongAnswer={(index) => this.onDeleteWrongAnswer(index)}
+                                onDeleteWrongAnswer={(id) => this.onDeleteWrongAnswer(id)}
                                 onAddWrongAnswer={this.onAddWrongAnswer}
                                 >
 
                             </Field>
 
-
-                            {/* { Select MODAL } */}
-
-                            <Modal
-                                animationType="fade"
-                                transparent={true}
-                                visible={this.state.modalVisible}
-                                onRequestClose={() => {
-                                    alert('Android Back.');
-                                }}
-                                >
-                                <View style={{"flex": 1, "backgroundColor": "rgba(0,0,0,0.2)"}}>
-                                    <ModalContainer style={styles.slideUpDown}>
-                                            <TouchableOpacity
-                                                style={{"alignSelf": "flex-end", "marginRight": 20, "paddingTop": 10}}
-                                                onPress={() => { this.setModalVisible(!this.state.modalVisible) }}>
-                                                <Text style={{"fontSize": 30, "color": gray}}>&times;</Text>
-                                            </TouchableOpacity>
-
-                                            <FlatList
-                                              data={allDecks}
-                                              renderItem={({item}) => (
-                                                  <ModalListItem onPress={() => this.selectDeck(item.title)}>
-                                                      <ModalListItemText>{item.title}</ModalListItemText>
-                                                  </ModalListItem>
-                                              )}
-                                            />
-                                    </ModalContainer>
-                                </View>
-                            </Modal>
-
                         </KeyboardAvoidingView>
                     </Container>
                 </ScrollView>
 
-                <SubmitButton>
+                <SubmitButton onPress={this.onSubmitCard}>
                     <Text style={{color: 'white', fontSize: 20}}>Add Card</Text>
                 </SubmitButton>
 
@@ -304,6 +207,3 @@ class CreateCard extends Component {
 
     }
 }
-
-
-export default CreateCard
