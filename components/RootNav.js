@@ -36,7 +36,7 @@ const TabBar = TabNavigator(
         tabBarPosition: 'bottom',
         animationEnabled: false,
         swipeEnabled: false,
-        lazy: false,
+        lazy: true,
         //initialRouteName: 'Decks'
     }
 )

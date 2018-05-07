@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+
+//React Native
 import {
     Text,
     View,
@@ -8,18 +10,21 @@ import {
     KeyboardAvoidingView
 } from 'react-native'
 
+// Extras
 import { getStatusBarHeight } from 'react-native-status-bar-height'
-import { pink, green, gray, lightgray, lightgreen } from '../utils/colors'
 import styled from 'styled-components/native'
+import { pink, green, gray, lightgray, lightgreen } from '../utils/colors'
 
+// Components
 import Field from '../components/Field'
 import ModalSelectDecks from '../components/ModalSelectDecks'
 
-import {
-    DATA_STORAGE_KEY,
-    addCardToDeck
-} from '../utils/api'
+// Store
+import { connect } from 'react-redux'
+import * as actions from '../actions/'
 
+
+// Styled Comopnents
 const Container = styled.View`
     padding: 0 40px 40px;
 `
@@ -40,7 +45,7 @@ const SubmitButton = styled.TouchableOpacity`
 `
 
 
-export default class CreateCard extends Component {
+class CreateCard extends Component {
     static navigationOptions ={
         title: "New Card",
         headerTintColor: 'white',
@@ -53,11 +58,14 @@ export default class CreateCard extends Component {
     }
     state = {
         inputDeck: '',
-        deckID: null,
         inputQuestion: '',
         inputCorrectAnswer: '',
         inputWrongAnswers: [],
         modalVisible: false,
+    }
+
+    componentDidMount(){
+        this.props.getDecks()
     }
 
     setModalVisible(visible) {
@@ -66,8 +74,7 @@ export default class CreateCard extends Component {
         })
     }
 
-    updateInput = ({value, name, id}) => {
-
+    onInputChange = ({value, name, id}) => {
         // When Multiple Inputs:
         if ( id !== undefined){
             this.setState({
@@ -91,8 +98,7 @@ export default class CreateCard extends Component {
     selectDeck(title, id){
         this.setModalVisible(false)
         this.setState({
-            inputDeck: title,
-            deckID: id
+            inputDeck: title
         })
     }
 
@@ -116,8 +122,9 @@ export default class CreateCard extends Component {
         })
     }
 
-    onSubmitCard = async () => {
+    onSubmitCard = () => {
         const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
+        const { addCard } = this.props
 
         const newCard = {
             question: inputQuestion,
@@ -127,16 +134,16 @@ export default class CreateCard extends Component {
             }
 
         }
-        // console.log( "deckID: ", deckID)
-        // console.log( "inputCorrectAnswer: ", inputCorrectAnswer)
-        // console.log( "inputWrongAnswers: ", inputWrongAnswers.map( answer => answer.text ))
-        //console.log( "Card Updates: ", newCard)
-        addCardToDeck(inputDeck, newCard)
+
+        addCard(inputDeck, newCard)
+        this.props.navigation.goBack()
     }
 
     render(){
 
         const { inputDeck } = this.state
+        const { decks } = this.props
+        //console.log(this.props.decks)
         return(
             <View style={{flex: 1}}>
 
@@ -158,6 +165,7 @@ export default class CreateCard extends Component {
                             {/* { Select MODAL } */}
 
                             <ModalSelectDecks
+                                data={decks}
                                 isModalVisible={this.state.modalVisible}
                                 onSelectDeck={(title, id) => this.selectDeck(title, id)}
                                 onSetModalVisible={(toggle) => this.setModalVisible(toggle)}
@@ -168,7 +176,7 @@ export default class CreateCard extends Component {
                                 label="Question"
                                 placeholder="What is JavaScript?"
                                 value={this.state.inputQuestion}
-                                onInputChange={(inputData) => this.updateInput(inputData)}
+                                onInputChange={(inputData) => this.onInputChange(inputData)}
                             >
                             </Field>
 
@@ -177,7 +185,7 @@ export default class CreateCard extends Component {
                                 label="Correct Answer"
                                 placeholder="A computer programming language"
                                 value={this.state.inputCorrectAnswer}
-                                onInputChange={(inputData) => this.updateInput(inputData)}
+                                onInputChange={(inputData) => this.onInputChange(inputData)}
                             >
                             </Field>
 
@@ -187,7 +195,7 @@ export default class CreateCard extends Component {
                                 label="Wrong Answers"
                                 isMultiple
                                 inputs={this.state.inputWrongAnswers ? this.state.inputWrongAnswers : null}
-                                onInputChange={(inputData) => this.updateInput(inputData)}
+                                onInputChange={(inputData) => this.onInputChange(inputData)}
                                 onDeleteWrongAnswer={(id) => this.onDeleteWrongAnswer(id)}
                                 onAddWrongAnswer={this.onAddWrongAnswer}
                                 >
@@ -207,3 +215,9 @@ export default class CreateCard extends Component {
 
     }
 }
+
+const mapStateToProps = state => ({
+    decks: state
+})
+
+export default connect(mapStateToProps, actions)(CreateCard)

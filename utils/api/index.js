@@ -1,18 +1,14 @@
 
 import { AsyncStorage } from 'react-native'
-import { dummyData } from './dummyData'
 
 export const DATA_STORAGE_KEY = 'APP:Data'
 
 // Set Initial Data
-export function setInitialData() {
-    const initialData = dummyData;
-    AsyncStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(initialData))
-}
+export const setInitialData = (data) => AsyncStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(data))
 
-export function getDecks() {
-    return AsyncStorage.getItem(DATA_STORAGE_KEY);
-}
+// Get Decks
+export const getDecks = () => AsyncStorage.getItem(DATA_STORAGE_KEY);
+
 
 export function addCardToDeck(title, card) {
     return AsyncStorage.getItem(DATA_STORAGE_KEY).then(result => {

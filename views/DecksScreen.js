@@ -1,48 +1,31 @@
 import React, { Component } from 'react'
+
+// React Native
 import {
     StyleSheet,
-    TouchableOpacity,
-    Text
+    Text,
+    AsyncStorage
 } from 'react-native';
 
+// Components
 import Layout from '../components/Layout'
 import Deck from '../components/Deck'
 
-import {
-    DATA_STORAGE_KEY,
-    setInitialData,
-    getDecks
-} from '../utils/api'
+// Store
+import { connect } from 'react-redux'
+import * as actions from '../actions/'
+
 
 class DecksScreen extends Component{
-    state = {
-        decks: {}
-    }
-
-    getData = async () => {
-        const decks = await getDecks();
-
-        // If there are Decks saved on AsyncStorage, bring them in.
-        if ( decks ) {
-            this.setState(() => ({
-                decks: JSON.parse(decks)
-            }));
-
-        // Otherwise, set some dummy data.
-        } else {
-            setInitialData()
-        }
-    }
 
     componentDidMount(){
-        this.getData()
+        this.props.getDecks()
+        //AsyncStorage.clear()
     }
 
-    updateDecks = () => {
-        this.getData()
-    }
     render(){
-        const { decks } = this.state
+        const { decks } = this.props
+        console.log("this.props.decks, ",decks)
         return(
             <Layout>
                 { decks && Object.values(decks).map( deck => (
@@ -53,11 +36,15 @@ class DecksScreen extends Component{
                         cards={deck.cards} />)
                 )
                 }
-                <TouchableOpacity onPress={this.updateDecks}><Text>Update Decks</Text></TouchableOpacity>
             </Layout>
         )
     }
 
 }
 
-export default DecksScreen
+
+const mapStateToProps = state => ({
+    decks: state
+})
+
+export default connect(mapStateToProps, actions)(DecksScreen)

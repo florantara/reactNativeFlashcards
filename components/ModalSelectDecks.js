@@ -10,14 +10,11 @@ import {
     Easing
 } from 'react-native'
 
+// Extras
 import styled from 'styled-components/native'
 import { lightgray, gray } from '../utils/colors'
-import {
-    DATA_STORAGE_KEY,
-    setInitialData,
-    getDecks
-} from '../utils/api'
 
+// Styled Components
 const ModalContainer = Animated.createAnimatedComponent(styled.View`
     background-color: white;
     border-radius: 10px;
@@ -50,27 +47,7 @@ const ModalListItemText = styled.Text`
 class ModalSelectDecks extends Component{
 
     state = {
-        modalVisible: this.props.isModalVisible,
-        decks: {}
-    }
-
-    getData = async () => {
-        const decks = await getDecks();
-
-        // If there are Decks saved on AsyncStorage, bring them in.
-        if ( decks ) {
-            this.setState(() => ({
-                decks: JSON.parse(decks)
-            }));
-
-        // Otherwise, set some dummy data.
-        } else {
-            setInitialData()
-        }
-    }
-
-    componentDidMount(){
-        this.getData()
+        modalVisible: this.props.isModalVisible
     }
 
     selectDeck(title, id){
@@ -100,6 +77,8 @@ class ModalSelectDecks extends Component{
     }
 
     render(){
+        const items = this.props.data
+
         if ( this.state.modalVisible ){
             this.onModalToggle()
         }
@@ -127,7 +106,9 @@ class ModalSelectDecks extends Component{
                 }}
                 >
                 <View style={{"flex": 1, "backgroundColor": "rgba(0,0,0,0.2)"}}>
+
                     <ModalContainer style={styles.slideUpDown}>
+
                             <TouchableOpacity
                                 style={{"alignSelf": "flex-end", "marginRight": 20, "paddingTop": 10}}
                                 onPress={() => { this.onSetModalVisible(!this.state.modalVisible) }}>
@@ -135,15 +116,17 @@ class ModalSelectDecks extends Component{
                             </TouchableOpacity>
 
                             <FlatList
+                                data={Object.values(items)}
                                 keyExtractor={(item, index) => index}
-                                data={Object.values(this.state.decks)}
                                 renderItem={({item}) => (
                                     <ModalListItem onPress={() => this.selectDeck(item.title, item.id)}>
                                         <ModalListItemText>{item.title}</ModalListItemText>
                                     </ModalListItem>
                                 )}
                             />
+
                     </ModalContainer>
+
                 </View>
             </Modal>
         )

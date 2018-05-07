@@ -38,7 +38,7 @@ const Deck = ({title, cards, color}) => {
     return(
         <ThemeProvider theme={deckColor}>
             <Card>
-                <Title>{title.toUpperCase()}</Title>
+                <Title>{title && title.toUpperCase()}</Title>
                 <Counter>
                     <Number>
                         {cards.length}
