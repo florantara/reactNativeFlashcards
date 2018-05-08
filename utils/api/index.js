@@ -9,7 +9,7 @@ export const setInitialData = (data) => AsyncStorage.setItem(DATA_STORAGE_KEY, J
 // Get Decks
 export const getDecks = () => AsyncStorage.getItem(DATA_STORAGE_KEY);
 
-
+// Add Card
 export function addCardToDeck(title, card) {
     return AsyncStorage.getItem(DATA_STORAGE_KEY).then(result => {
         const data = JSON.parse(result);
@@ -24,13 +24,15 @@ export function addCardToDeck(title, card) {
     });
 }
 
-
-// Helper Methods:
-
-// getDecks: return all of the decks along with their titles, questions, and answers.
-
-// getDeck: take in a single id argument and return the deck associated with that id.
-
-// saveDeckTitle: take in a single title argument and add it to the decks.
-
-// addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
+// Add Deck
+export function addDeck(newDeck){
+    const { title, id, color } = newDeck
+    return AsyncStorage.mergeItem(DATA_STORAGE_KEY, JSON.stringify({
+        [title]: {
+            title: title,
+            id: id,
+            color: color,
+            cards: []
+        }
+    }))
+}

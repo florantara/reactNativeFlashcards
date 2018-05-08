@@ -7,25 +7,25 @@ import styled from 'styled-components/native'
 import { ThemeProvider } from 'styled-components'
 
 const Card = styled.View`
-    width: 80%;
+    width: 100%;
     background: ${props => props.theme.color};
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 40;
-    margin-bottom: 20;
-    border-radius: 5
+    height: 40px;
+    margin-bottom: 20px;
+    border-radius: 5px
 `
 
 const Title = styled.Text`
     color: white;
-    padding-left: 15;
+    padding-left: 15px;
     font-weight: bold;
-    font-size: 15
+    font-size: 15px
 `
 const Counter = styled.View`
     background: white;
-    flex-basis: 50;
+    flex-basis: 50px;
     align-self: stretch;
 `
 const Number = styled.Text`
@@ -38,10 +38,10 @@ const Deck = ({title, cards, color}) => {
     return(
         <ThemeProvider theme={deckColor}>
             <Card>
-                <Title>{title && title.toUpperCase()}</Title>
+                <Title>{title.toUpperCase().trim()}</Title>
                 <Counter>
                     <Number>
-                        {cards.length}
+                        {cards ? cards.length : '-'}
                     </Number>
                 </Counter>
             </Card>

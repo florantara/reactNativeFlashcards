@@ -7,7 +7,8 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Alert
 } from 'react-native'
 
 // Extras
@@ -122,6 +123,18 @@ class CreateCard extends Component {
         })
     }
 
+    onHandleSubmit = () => {
+        const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
+
+        if ( inputDeck === '' || inputQuestion === '' || inputCorrectAnswer === '' || inputWrongAnswers.length === 0) {
+            Alert.alert(
+                'Please complete all the fields'
+            )
+        } else {
+            this.onSubmitCard()
+        }
+    }
+
     onSubmitCard = () => {
         const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
         const { addCard } = this.props
@@ -136,7 +149,14 @@ class CreateCard extends Component {
         }
 
         addCard(inputDeck, newCard)
-        this.props.navigation.goBack()
+        Alert.alert(
+            'Your card was added',
+            '',
+            [
+                {text: 'OK', onPress: () => this.props.navigation.goBack()},
+            ],
+        )
+
     }
 
     render(){
@@ -206,7 +226,7 @@ class CreateCard extends Component {
                     </Container>
                 </ScrollView>
 
-                <SubmitButton onPress={this.onSubmitCard}>
+                <SubmitButton onPress={this.onHandleSubmit}>
                     <Text style={{color: 'white', fontSize: 20}}>Add Card</Text>
                 </SubmitButton>
 

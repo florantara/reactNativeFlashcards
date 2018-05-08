@@ -12,7 +12,16 @@ function decks ( state = {}, action ){
                 ...action.decks
             }
         case ADD_DECK :
-            return state
+            console.log("ADD_DECK", action.title, action.color, action.id)
+            return {
+                ...state,
+                [action.title]: {
+                    color: action.color,
+                    id: action.id,
+                    title: action.title,
+                    cards: []
+                }
+            }
         case ADD_CARD :
             return {
                 ...state,

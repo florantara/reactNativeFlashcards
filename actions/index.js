@@ -7,7 +7,6 @@ export const ADD_CARD = 'ADD_CARD'
 
 
 // Get Decks
-
 export const getDecksAction = decks => ({
     type: GET_DECKS,
     decks
@@ -18,15 +17,8 @@ export const getDecks = () => dispatch =>
             const decks = JSON.parse(data)
             const initialData = dummyData
             if ( decks ) {
-                //console.log("Using Data from AsyncStorage")
-                //console.log(decks)
                 dispatch(getDecksAction(decks))
             } else {
-                //console.log("Starting with Initial Data")
-                //console.log(decks)
-                //console.log('but...............')
-                //console.log(initialData)
-
                 API.setInitialData(initialData).then( data =>
                     dispatch(getDecksAction(initialData))
                 )
@@ -35,7 +27,7 @@ export const getDecks = () => dispatch =>
     )
 
 
-
+// Add Card
 export const addCardAction = (title, card) => ({
         type: ADD_CARD,
         title,
@@ -49,9 +41,20 @@ export const addCard = (title, card) => dispatch =>
     )
 
 
-export function addDeck(deck){
+// Add Deck
+export function addDeckAction(title, color, id){
     return{
         type: ADD_DECK,
-        deck
+        title,
+        color,
+        id
     }
+}
+
+export const addDeck= (newDeck) => dispatch => {
+    const { title, id, color } = newDeck
+    API.addDeck(newDeck).then( data => {
+            dispatch(addDeckAction(title, color, id))
+        }
+    )
 }
