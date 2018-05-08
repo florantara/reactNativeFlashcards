@@ -37,14 +37,12 @@ class DecksScreen extends Component{
             { creatingDeck: !this.state.creatingDeck },
             () => {
                 if ( this.state.creatingDeck === false ){
-                    this.onSaveDeck()
+                    if ( this.state.newDeckTitle !== '') {
+                        this.onSaveDeck()
+                    }
                 }
             }
         )
-    }
-
-    handleSubmit = () =>{
-        // Show an Alert if the Deck title is empty.
     }
 
     onSaveDeck = () => {
@@ -96,7 +94,7 @@ class DecksScreen extends Component{
 
 
                     <Text style={{fontSize: 17}}>
-                        {creatingDeck ? 'SAVE' : 'Create Deck'}
+                        {creatingDeck ? 'DONE' : 'Create Deck'}
                     </Text>
 
                 </TouchableOpacity>
