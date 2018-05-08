@@ -5,7 +5,11 @@ import {
     ImageBackground,
 } from 'react-native';
 
-const Layout = ({children}) =>{
+const Layout = ({children, top}) =>{
+
+    const verticalAlign = {
+        justifyContent: top ? 'flex-start' : 'center'
+    }
     return(
         <ImageBackground
             source={{uri: 'https://res.cloudinary.com/techflor/image/upload/v1522123593/deskBg.jpg'}}
@@ -14,7 +18,7 @@ const Layout = ({children}) =>{
                 height: null,
             }}
         >
-            <View style={styles.container}>
+            <View style={[styles.container, verticalAlign ]}>
 
                 {children}
 
@@ -29,7 +33,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         width: '80%',
         left: '10%'
     },

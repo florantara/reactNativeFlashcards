@@ -69,6 +69,16 @@ class CreateCard extends Component {
         this.props.getDecks()
     }
 
+    componentWillReceiveProps(nextProps){
+        // If coming from the SingleDeck screen, the title will be passed down:
+
+        if (nextProps.navigation.state.params){
+            this.setState({
+                inputDeck: nextProps.navigation.state.params
+            })
+        }
+    }
+
     setModalVisible(visible) {
         this.setState({
             modalVisible: visible
@@ -160,7 +170,6 @@ class CreateCard extends Component {
     }
 
     render(){
-
         const { inputDeck } = this.state
         const { decks } = this.props
         //console.log(this.props.decks)

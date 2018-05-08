@@ -1,22 +1,52 @@
 import React from 'react'
-import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation'
+import { TabNavigator, TabBarBottom, StackNavigator, SwitchNavigator } from 'react-navigation'
 import { Animated, Easing } from 'react-native'
 
 // Views:
 import HomeScreen from '../views/HomeScreen'
 import DecksScreen from '../views/DecksScreen'
+import SingleDeck from '../views/SingleDeck'
 import CreateCard from '../views/CreateCard'
 
 //Icons
 import { Home, Stack } from '../utils/icons'
 
+
+export const DecksStack = StackNavigator(
+    {
+        Decks: {
+            screen: DecksScreen,
+            navigationOptions: {
+                header: null
+            }
+        },
+        SingleDeck: {
+            screen: SingleDeck
+        },
+    },
+    {
+        navigationOptions: {
+        gesturesEnabled: false,
+    },
+        transitionConfig: () => ({
+            transitionSpec: {
+                duration: 200,
+                easing: Easing.out(Easing.poly(4)),
+                timing: Animated.timing,
+            }
+        }),
+    }
+)
+
+// TabBar
+// Not all screens have it, so it gets added into a StackNavigator
 const TabBar = TabNavigator(
     {
         Home: {
             screen: HomeScreen
         },
         Decks: {
-            screen: DecksScreen
+            screen: DecksStack
         }
     },
     {
@@ -37,10 +67,8 @@ const TabBar = TabNavigator(
         animationEnabled: false,
         swipeEnabled: false,
         lazy: true,
-        //initialRouteName: 'Decks'
     }
 )
-
 
 export default RootNav = StackNavigator(
     {
@@ -52,15 +80,13 @@ export default RootNav = StackNavigator(
         },
         Create: {
             screen: CreateCard,
-        }
+        },
 
     },
     {
-        //headerMode: 'none',
-        //mode: 'modal',
         navigationOptions: {
-        gesturesEnabled: false,
-    },
+            gesturesEnabled: false,
+        },
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 200,

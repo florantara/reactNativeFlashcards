@@ -1,7 +1,8 @@
 import React from 'react'
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native'
 import styled from 'styled-components/native'
 import { ThemeProvider } from 'styled-components'
@@ -31,21 +32,24 @@ const Counter = styled.View`
 const Number = styled.Text`
     margin: auto
 `
-const Deck = ({title, cards, color}) => {
+const Deck = ({title, cards, color, onPress}) => {
     const deckColor = {
         color
     }
     return(
-        <ThemeProvider theme={deckColor}>
-            <Card>
-                <Title>{title.toUpperCase().trim()}</Title>
-                <Counter>
-                    <Number>
-                        {cards ? cards.length : '-'}
-                    </Number>
-                </Counter>
-            </Card>
-        </ThemeProvider>
+
+            <ThemeProvider theme={deckColor}>
+                    <TouchableOpacity onPress={onPress} style={{width: '100%'}}>
+                        <Card>
+                            <Title>{title.toUpperCase().trim()}</Title>
+                            <Counter>
+                                <Number>
+                                    {cards ? cards.length : '-'}
+                                </Number>
+                            </Counter>
+                        </Card>
+                    </TouchableOpacity>
+            </ThemeProvider>
     )
 }
 

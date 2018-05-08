@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNavigation } from 'react-navigation'
 
 // React Native
 import {
@@ -64,6 +65,13 @@ class DecksScreen extends Component{
         })
     }
 
+    onRequestDeck = (deck) =>{
+        //console.log(deck)
+        //console.log("navigate: " , this.props.navigation.navigate("DeckScreen"))
+        console.log(this.props.navigation.navigate)
+        this.props.navigation.navigate("SingleDeck", deck)
+    }
+
     render(){
         const { decks } = this.props
         const { creatingDeck } = this.state
@@ -74,7 +82,9 @@ class DecksScreen extends Component{
                         key={deck.id}
                         color={deck.color}
                         title={deck.title}
-                        cards={deck.cards} />)
+                        cards={deck.cards}
+                        onPress={() => this.onRequestDeck(deck)}
+                    />)
                 )
                 }
 
@@ -108,5 +118,4 @@ class DecksScreen extends Component{
 const mapStateToProps = state => ({
     decks: state
 })
-
-export default connect(mapStateToProps, actions)(DecksScreen)
+export default connect(mapStateToProps, actions)(withNavigation(DecksScreen))
