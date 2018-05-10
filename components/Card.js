@@ -86,7 +86,7 @@ class Card extends Component{
 
     componentWillReceiveProps = (nextProps, prevState) =>{
         if ( this.props.cardNumber ){
-            this.flipCard()
+            this.flipCard(true)
             this.animateColor()
         }
     }
@@ -96,15 +96,15 @@ class Card extends Component{
     //
 
     // Flip Card
-    flipCard = () =>{
+    flipCard = (isNewCard) =>{
         if ( this.value > 90 ){
             this.setState({
                 viewingSide: 'front'
             })
             Animated.spring(this.animatedValue, {
                 toValue: 0,
-                friction: 5,
-                tension: 12
+                speed: 10,
+                bounciness: 12,
             }).start()
         } else {
             this.setState({
@@ -112,8 +112,8 @@ class Card extends Component{
             })
             Animated.spring(this.animatedValue, {
                 toValue: 180,
-                friction: 5,
-                tension: 12
+                speed: 10,
+                bounciness: 12,
             }).start()
         }
     }
@@ -153,7 +153,7 @@ class Card extends Component{
             backgroundColor: this.colorInterpolate
         }
         return(
-            <View style={{flex: 1,width: '100%', maxHeight: 400}}>
+            <View style={{flex: 1,width: '100%', maxHeight: 450}}>
                 <Title style={colorHighlight}>
                     <Text style={{color: 'white', fontSize: 23}}>{cardNumber} of 5</Text>
                 </Title>

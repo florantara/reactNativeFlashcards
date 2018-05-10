@@ -10,6 +10,7 @@ import {
 //Components
 import Card from '../components/Card'
 import Layout from '../components/Layout'
+import ScoreScreen from '../components/ScoreScreen'
 
 // Store
 import { connect } from 'react-redux'
@@ -35,7 +36,8 @@ class StudyQuiz extends Component{
     state = {
         cards: [],
         activeCard: undefined,
-        scores: []
+        scores: [],
+        showingFinalScreen: false
     }
 
     componentWillMount(){
@@ -110,21 +112,27 @@ class StudyQuiz extends Component{
             })
         } else {
             // trigger Calculate Score
-            console.log("done")
+            this.setState({
+                showingFinalScreen: true
+            })
         }
     }
 
     render(){
-        const { activeCard } = this.state
-        console.log("ACTIVE CArd", this.state.activeCard)
+        const { activeCard, showingFinalScreen, scores } = this.state
         return(
             <Layout>
-                <Card
-                    cardNumber={activeCard && activeCard.cardNumber}
-                    question={activeCard && activeCard.question}
-                    displayAnswer={activeCard &&  activeCard.displayAnswer}
-                    onSubmitVote={(vote) => this.voteCard(vote)}
-                />
+                { showingFinalScreen ?
+                    <ScoreScreen scores={scores}/>
+                    :
+                    <Card
+                        cardNumber={activeCard && activeCard.cardNumber}
+                        question={activeCard && activeCard.question}
+                        displayAnswer={activeCard &&  activeCard.displayAnswer}
+                        onSubmitVote={(vote) => this.voteCard(vote)}
+                    />
+                }
+
             </Layout>
         )
     }
