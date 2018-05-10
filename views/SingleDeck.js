@@ -26,13 +26,15 @@ const Box = styled.View`
     margin-top: 40px;
     background: white;
     align-items: center;
+    border-top-width: 5px;
+    border-color: ${(props) => props.color}
 `
 
 const SingleDeck = (props) => {
     return(
         <Layout top>
-            <Box>
-                <Title>{props.navigation.state.params.title}</Title>
+            <Box color={props.navigation.state.params.color}>
+                <Title>{props.navigation.state.params.title.trim()}</Title>
                 <Text>
                     {props.navigation.state.params.cards.length === 0 ?
                     'No cards yet. Add the first one!'
@@ -63,7 +65,7 @@ export default SingleDeck
 
 SingleDeck.navigationOptions = ({navigation}) => {
         return {
-            headerTitle: `${navigation.state.params.title} Deck`
+            headerTitle: `${navigation.state.params.title.trim()} Deck`
         }
     }
 

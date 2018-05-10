@@ -15,14 +15,14 @@ const Card = styled.View`
     align-items: center;
     height: 40px;
     margin-bottom: 20px;
-    border-radius: 5px
+    border-radius: 5px;
 `
 
 const Title = styled.Text`
     color: white;
     padding-left: 15px;
     font-weight: bold;
-    font-size: 15px
+    font-size: 15px;
 `
 const Counter = styled.View`
     background: white;

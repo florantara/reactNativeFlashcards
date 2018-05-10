@@ -63,6 +63,7 @@ class CreateCard extends Component {
         inputCorrectAnswer: '',
         inputWrongAnswers: [],
         modalVisible: false,
+        addingToExistingDeck: false
     }
 
     componentDidMount(){
@@ -74,15 +75,19 @@ class CreateCard extends Component {
 
         if (nextProps.navigation.state.params){
             this.setState({
-                inputDeck: nextProps.navigation.state.params
+                inputDeck: nextProps.navigation.state.params,
+                addingToExistingDeck: true
             })
         }
     }
 
     setModalVisible(visible) {
-        this.setState({
-            modalVisible: visible
-        })
+        // If coming from a Single Deck screen, you can't change the Deck.
+        if ( ! this.state.addingToExistingDeck ) {
+            this.setState({
+                modalVisible: visible
+            })
+        }
     }
 
     onInputChange = ({value, name, id}) => {
@@ -184,7 +189,7 @@ class CreateCard extends Component {
                             <Field
                                 isSelect
                                 isFirstField
-                                label="Deck"
+                                label={this.state.addingToExistingDeck ? 'Adding to Deck' : 'Deck'}
                             >
                                 <Select onPress={() => { this.setModalVisible(true) }}>
                                  {inputDeck ? inputDeck : 'Select a deck '}

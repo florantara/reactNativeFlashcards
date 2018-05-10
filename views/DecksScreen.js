@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Text,
     View,
-    AsyncStorage,
+    ScrollView,
     TouchableOpacity,
     Alert
 } from 'react-native';
@@ -66,8 +66,6 @@ class DecksScreen extends Component{
     }
 
     onRequestDeck = (deck) =>{
-        //console.log(deck)
-        //console.log("navigate: " , this.props.navigation.navigate("DeckScreen"))
         console.log(this.props.navigation.navigate)
         this.props.navigation.navigate("SingleDeck", deck)
     }
@@ -76,39 +74,42 @@ class DecksScreen extends Component{
         const { decks } = this.props
         const { creatingDeck } = this.state
         return(
-            <Layout>
-                { decks && Object.values(decks).map( deck => (
-                    <Deck
-                        key={deck.id}
-                        color={deck.color}
-                        title={deck.title}
-                        cards={deck.cards}
-                        onPress={() => this.onRequestDeck(deck)}
-                    />)
-                )
-                }
+            <ScrollView contentContainerStyle={{justifyContent: 'center', height: '100%', width: '100%'}}>
+                <Layout>
+                    { decks && Object.values(decks).map( deck => (
+                        <Deck
+                            key={deck.id}
+                            color={deck.color}
+                            title={deck.title}
+                            cards={deck.cards}
+                            onPress={() => this.onRequestDeck(deck)}
+                        />)
+                    )
+                    }
 
-                {creatingDeck &&
-                    <Field
-                        name='newDeckTitle'
-                        placeholder="What's the topic?"
-                        value={this.state.newDeckTitle}
-                        onInputChange={(inputData) => this.onInputChange(inputData)}
-                        isWide
-                        isLastField
-                        solidColor
-                        autoFocus
-                    />
-                }
-                <TouchableOpacity onPress={this.handleCreateDeck}>
+                    {creatingDeck &&
+                        <Field
+                            name='newDeckTitle'
+                            placeholder="What's the topic?"
+                            value={this.state.newDeckTitle}
+                            onInputChange={(inputData) => this.onInputChange(inputData)}
+                            isWide
+                            isLastField
+                            solidColor
+                            autoFocus
+                            isSingleLine
+                        />
+                    }
+                    <TouchableOpacity onPress={this.handleCreateDeck}>
 
 
-                    <Text style={{fontSize: 17}}>
-                        {creatingDeck ? 'DONE' : 'Create Deck'}
-                    </Text>
+                        <Text style={{fontSize: 17}}>
+                            {creatingDeck ? 'DONE' : 'Create Deck'}
+                        </Text>
 
-                </TouchableOpacity>
-            </Layout>
+                    </TouchableOpacity>
+                </Layout>
+            </ScrollView>
         )
     }
 

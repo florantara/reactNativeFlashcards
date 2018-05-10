@@ -4,9 +4,15 @@ import { Animated, Easing } from 'react-native'
 
 // Views:
 import HomeScreen from '../views/HomeScreen'
+
 import DecksScreen from '../views/DecksScreen'
 import SingleDeck from '../views/SingleDeck'
+
 import CreateCard from '../views/CreateCard'
+
+import StudyQuiz from '../views/StudyQuiz'
+import StudyCard from '../views/StudyCard'
+
 
 //Icons
 import { Home, Stack } from '../utils/icons'
@@ -26,8 +32,8 @@ export const DecksStack = StackNavigator(
     },
     {
         navigationOptions: {
-        gesturesEnabled: false,
-    },
+            gesturesEnabled: false,
+        },
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 200,
@@ -70,6 +76,8 @@ const TabBar = TabNavigator(
     }
 )
 
+
+
 export default RootNav = StackNavigator(
     {
         Home: {
@@ -81,6 +89,9 @@ export default RootNav = StackNavigator(
         Create: {
             screen: CreateCard,
         },
+        StudyQuiz: {
+            screen: StudyQuiz
+        }
 
     },
     {

@@ -23,10 +23,12 @@ const HomeScreen = (props) => {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <View style={styles.button}>
-                    <Play style={styles.buttonIcon}/>
-                    <Text style={styles.buttonText}>Study</Text>
-                </View>
+                <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz')}>
+                    <View style={styles.button}>
+                        <Play style={styles.buttonIcon}/>
+                        <Text style={styles.buttonText}>Study</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </Layout>
     )

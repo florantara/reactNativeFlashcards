@@ -33,7 +33,7 @@ const Input = styled.TextInput`
     width: 100%;
     background-color: ${props => props.solidColor ? 'white' : 'rgba(255,255,255,0)'};
     text-align: ${props => props.solidColor ? 'center' : 'left'};
-    padding-top: ${props => props.solidColor ? '14px' : '0'};
+    padding-top: ${props => props.solidColor ? '5px' : '0'};
 `
 
 const InputIconWrap = styled.View`
@@ -56,7 +56,7 @@ font-size: 20px;
 `
 
 
-const Field = ({label, placeholder, isFirstField, isLastField, value, name, onInputChange, isSelect, children, isMultiple, inputs, onDeleteWrongAnswer, onAddWrongAnswer, isWide, solidColor, autoFocus }) => {
+const Field = ({label, placeholder, isFirstField, isLastField, value, name, onInputChange, isSelect, children, isMultiple, inputs, onDeleteWrongAnswer, onAddWrongAnswer, isWide, solidColor, autoFocus, isSingleLine }) => {
 
     const onValueChange = ( value, id ) => {
 
@@ -88,13 +88,13 @@ const Field = ({label, placeholder, isFirstField, isLastField, value, name, onIn
     return(
 
 
-        <FieldWrap isFirstField={isFirstField ? true : null} isLastField={isLastField ? true : null} isWide={isWide ? true : null}>
+        <FieldWrap isFirstField={isFirstField ? true : null} isLastField={isLastField ? true : null} isWide={isWide ? true : null} isSingleLine={isSingleLine ? true : null}>
             {label && <Label>{label.toUpperCase()}</Label>}
             { isSelect ?
                 children
                 :
                 <Input
-                    multiline={true}
+                    multiline={isSingleLine ? false : true}
                     placeholder={placeholder}
                     onChangeText={(value) => onValueChange(value)}
                     value={value}
