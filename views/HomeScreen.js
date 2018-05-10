@@ -19,14 +19,14 @@ const HomeScreen = (props) => {
                     <View style={styles.button}>
                         <Add style={styles.buttonIcon}/>
                         <Text style={styles.buttonText}>
-                            Create
+                            New Card
                         </Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz')}>
-                    <View style={styles.button}>
+                    <View style={[styles.button, {marginBottom: 0}]}>
                         <Play style={styles.buttonIcon}/>
-                        <Text style={styles.buttonText}>Study</Text>
+                        <Text style={styles.buttonText}>Random Quiz</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -42,20 +42,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         marginBottom: 30,
         borderRadius: 4,
-        maxHeight: 50,
+        height: 60,
         paddingRight: 20,
         paddingLeft: 20,
+        width: 250,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 20,
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     buttonText: {
         textAlign: 'center',
         fontSize: 20,
-        marginLeft: 10
+        marginLeft: 15
+    },
+    buttonGroup: {
+        width: '100%',
+        minHeight: 170,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

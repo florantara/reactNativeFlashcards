@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { withNavigation } from 'react-navigation'
 
 // React Native
 import {
@@ -8,7 +7,8 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    Alert
+    Alert,
+    AsyncStorage
 } from 'react-native';
 
 // Components
@@ -18,7 +18,7 @@ import Field from '../components/Field'
 
 // Store
 import { connect } from 'react-redux'
-import * as actions from '../actions/'
+import * as actions from '../actions/Decks'
 
 
 class DecksScreen extends Component{
@@ -28,7 +28,7 @@ class DecksScreen extends Component{
         newDeckTitle: ''
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.props.getDecks()
         //AsyncStorage.clear()
     }
@@ -66,13 +66,13 @@ class DecksScreen extends Component{
     }
 
     onRequestDeck = (deck) =>{
-        console.log(this.props.navigation.navigate)
         this.props.navigation.navigate("SingleDeck", deck)
     }
 
     render(){
         const { decks } = this.props
         const { creatingDeck } = this.state
+        //console.log(decks)
         return(
             <ScrollView contentContainerStyle={{justifyContent: 'center', height: '100%', width: '100%'}}>
                 <Layout>
@@ -117,6 +117,15 @@ class DecksScreen extends Component{
 
 
 const mapStateToProps = state => ({
-    decks: state
+    decks: state.decks
 })
-export default connect(mapStateToProps, actions)(withNavigation(DecksScreen))
+
+// function mapStateToProps(state) {
+//  console.log('mapStateToProps', state)
+//
+//   return {
+//     decks: state.decks
+//   }
+// }
+
+export default connect(mapStateToProps, actions)(DecksScreen)

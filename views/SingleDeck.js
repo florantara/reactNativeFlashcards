@@ -24,10 +24,18 @@ const Box = styled.View`
     padding: 30px;
     border-radius: 5px;
     margin-top: 40px;
-    background: white;
+    background: #F9F9F9;
     align-items: center;
     border-top-width: 5px;
     border-color: ${(props) => props.color}
+`
+const CardsCount = styled.View`
+    width: 80px;
+    height: 28px;
+    padding: 5px;
+    align-items: center;
+    background-color: ${(props) => props.color};
+    border-radius: 5px;
 `
 
 const SingleDeck = (props) => {
@@ -35,14 +43,16 @@ const SingleDeck = (props) => {
         <Layout top>
             <Box color={props.navigation.state.params.color}>
                 <Title>{props.navigation.state.params.title.trim()}</Title>
-                <Text>
-                    {props.navigation.state.params.cards.length === 0 ?
-                    'No cards yet. Add the first one!'
-                    :
-                    `Contains ${props.navigation.state.params.cards.length} card${props.navigation.state.params.cards.length > 1 ? 's' : ''}`
-                    }
 
-                </Text>
+                {props.navigation.state.params.cards.length === 0 ?
+                    <Text>No cards yet. Add the first one!</Text>
+                :
+                    <CardsCount color={props.navigation.state.params.color}>
+                        <Text style={{color: 'white'}}>
+                            {props.navigation.state.params.cards.length} card{props.navigation.state.params.cards.length > 1 ? 's' : ''}
+                        </Text>
+                    </CardsCount>
+                }
             </Box>
 
             <TouchableOpacity onPress={() => props.navigation.navigate('Create', props.navigation.state.params.title)}>

@@ -12,6 +12,7 @@ import {
 import styled from 'styled-components/native'
 import { blue } from '../utils/colors'
 
+// Styled Components
 const Box = Animated.createAnimatedComponent(styled.View`
     width: 100%;
     background: white;
@@ -19,25 +20,14 @@ const Box = Animated.createAnimatedComponent(styled.View`
     backface-visibility: hidden;
     flex: 1;
 `)
-const Title = styled.View`
-    height: 100px;
+const Title = Animated.createAnimatedComponent(styled.View`
+    height: 90px;
     background-color: #222;
     align-items: center;
     justify-content: center;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-`
-const Question = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    background-color: #F9F9F9
-`
-const Answer = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-`
+`)
 const ActionsBar = styled.View`
     width: 100%;
     height: 45px;
@@ -65,6 +55,7 @@ const FlipButton = styled.TouchableOpacity`
     margin-top: 20px;
     width: 100%;
 `
+
 class Card extends Component{
 
     state = {
@@ -73,6 +64,7 @@ class Card extends Component{
 
     componentWillMount(){
         this.animatedValue = new Animated.Value(0)
+        this.animatedFadeValue = new Animated.Value(0)
         this.value = 0;
         this.animatedValue.addListener( ({value}) => {
             this.value = value
@@ -85,7 +77,25 @@ class Card extends Component{
             inputRange: [0, 180],
             outputRange: ['180deg', '360deg']
         })
+        this.colorInterpolate = this.animatedFadeValue.interpolate({
+            inputRange: [0, 150],
+            outputRange: ['rgb(0,0,0)', 'rgb(112, 196, 214)']
+        })
+
     }
+
+    componentWillReceiveProps = (nextProps, prevState) =>{
+        if ( this.props.cardNumber ){
+            this.flipCard()
+            this.animateColor()
+        }
+    }
+
+    //
+    // Animations
+    //
+
+    // Flip Card
     flipCard = () =>{
         if ( this.value > 90 ){
             this.setState({
@@ -106,10 +116,28 @@ class Card extends Component{
                 tension: 12
             }).start()
         }
+    }
+    // Transition Color to Highlight Title
+    animateColor() {
+        Animated.sequence([
+            Animated.timing(this.animatedFadeValue, {
+                toValue: 150,
+                duration: 350,
+                delay: 100
+            }),
+            Animated.timing(this.animatedFadeValue, {
+                toValue: 0,
+                duration: 350
+            })
+        ]).start()
+    }
 
-
+    sendVote = (vote) => {
+        this.props.onSubmitVote(vote)
     }
     render(){
+
+        const { question, displayAnswer, cardNumber } = this.props
         const frontAnimatedStyle = {
             transform: [
                 { rotateY: this.frontInterpolate }
@@ -120,41 +148,44 @@ class Card extends Component{
                 { rotateY: this.backInterpolate }
             ]
         }
+
+        const colorHighlight = {
+            backgroundColor: this.colorInterpolate
+        }
         return(
-            <View style={{flex: 1,width: '100%', maxHeight: '90%'}}>
-                <Title>
-                    <Text style={{color: 'white', fontSize: 20, marginBottom: 10}}>Javascript</Text>
-                    <Text style={{color: 'white'}}>1 of 5</Text>
+            <View style={{flex: 1,width: '100%', maxHeight: 400}}>
+                <Title style={colorHighlight}>
+                    <Text style={{color: 'white', fontSize: 23}}>{cardNumber} of 5</Text>
                 </Title>
                 <View style={{flex: 1}}>
                     <Box style={frontAnimatedStyle}>
 
-                        <Question>
-                            <Text>Is JavaScript case Sensitive?</Text>
-                        </Question>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                            <Text style={{fontSize: 25, textAlign: 'center', lineHeight: 40, paddingLeft: 20, paddingRight: 20}}>{question}</Text>
+                        </View>
 
                     </Box>
                     <Box style={[backAnimatedStyle, {position: 'absolute', top: 0, height: '100%'}]}>
-                        <Answer>
-                            <Text>Nope</Text>
-                        </Answer>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                            <Text style={{fontSize: 25, textAlign: 'center', lineHeight: 40, paddingLeft: 20, paddingRight: 20}}>{displayAnswer}</Text>
+                        </View>
 
                         <ActionsBar>
-                            <ActionButton action="incorrect">
+                            <ActionButton action="incorrect" onPress={() => this.sendVote('incorrect')}>
                                 <ActionButtonText>INCORRECT</ActionButtonText>
                             </ActionButton>
-                            <ActionButton action="correct">
+                            <ActionButton action="correct" onPress={() => this.sendVote('correct')}>
                                 <ActionButtonText>CORRECT</ActionButtonText>
                             </ActionButton>
                         </ActionsBar>
                     </Box>
                 </View>
                     <FlipButton onPress={this.flipCard}>
-                        <Text style={{color: 'white'}}>
+                        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>
                             { this.state.viewingSide === 'back'?
-                                'Show Question'
+                                '<- QUESTION'
                             :
-                                'Show answer'
+                                'ANSWER ->'
                             }
                         </Text>
                     </FlipButton>

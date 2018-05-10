@@ -22,7 +22,7 @@ import ModalSelectDecks from '../components/ModalSelectDecks'
 
 // Store
 import { connect } from 'react-redux'
-import * as actions from '../actions/'
+import * as actions from '../actions/Decks'
 
 
 // Styled Comopnents
@@ -66,7 +66,7 @@ class CreateCard extends Component {
         addingToExistingDeck: false
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.props.getDecks()
     }
 

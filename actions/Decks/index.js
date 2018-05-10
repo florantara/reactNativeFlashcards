@@ -1,9 +1,11 @@
-import * as API from '../utils/api'
-import dummyData  from '../utils/api/dummyData'
+import * as API from '../../utils/api'
+import dummyData  from '../../utils/api/dummyData'
 
-export const GET_DECKS = 'GET_DECKS'
-export const ADD_DECK = 'ADD_DECK'
-export const ADD_CARD = 'ADD_CARD'
+import {
+    GET_DECKS,
+    ADD_CARD,
+    ADD_DECK
+} from '../types'
 
 
 // Get Decks
