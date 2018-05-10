@@ -1,7 +1,7 @@
 import {
     START_RANDOM_QUIZ,
     ADD_SCORE,
-    CALCULATE_SCORE
+    START_DECK_QUIZ
 } from '../actions/types'
 
 import { getRandom } from '../utils/tools'
@@ -31,7 +31,6 @@ export function StudyQuiz( state = quiz, action ){
 
             }
         case ADD_SCORE :
-            console.log("Action @ Reducer: ADD_SCORE", action.score)
             return {
                 ...state,
                 scores: [
@@ -39,9 +38,12 @@ export function StudyQuiz( state = quiz, action ){
                     action.score
                 ]
             }
-        case CALCULATE_SCORE :
-            console.log("Action @ Reducer: CALCULATE_SCORE")
-            return state
+        case START_DECK_QUIZ :
+            return {
+                ...state,
+                ...state.decks = action.deck,
+                ...state.cards = action.deck[0].cards
+            }
         default:
             return state
     }

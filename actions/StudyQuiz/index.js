@@ -3,9 +3,11 @@ import * as API from '../../utils/api'
 import {
     START_RANDOM_QUIZ,
     ADD_SCORE,
-    CALCULATE_SCORE
+    START_DECK_QUIZ
 } from '../types'
 
+
+// Random Quiz from all Decks
 export const startRandomQuiz = (decks) => ({
     type: START_RANDOM_QUIZ,
     decks
@@ -32,11 +34,26 @@ export const randomQuiz = () => dispatch =>
         }
     ).then( reducedDecks => dispatch(startRandomQuiz(reducedDecks))  )
 
+
+// Vote Cards
 export const addScore = (score) => ({
     type: ADD_SCORE,
     score
 })
 
-export const calculateScore = () => ({
-    type: CALCULATE_SCORE
+
+// Quiz From Specific Deck
+export const startQuizFromDeck = (deck) => ({
+    type: START_DECK_QUIZ,
+    deck
 })
+
+export const deckQuiz = (deckTitle) => dispatch =>
+    API.getDeck(deckTitle).then( deck => {
+        const reducedDeck = [{
+            deck: deck.title,
+            cards: deck.cards
+        }]
+        return reducedDeck
+    }
+).then( deck => dispatch(startQuizFromDeck(deck)))

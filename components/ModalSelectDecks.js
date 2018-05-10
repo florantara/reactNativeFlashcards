@@ -77,7 +77,8 @@ class ModalSelectDecks extends Component{
     }
 
     render(){
-        const items = this.props.data
+        const items = Object.values(this.props.data.decks)
+
 
         if ( this.state.modalVisible ){
             this.onModalToggle()
@@ -115,15 +116,18 @@ class ModalSelectDecks extends Component{
                                 <Text style={{"fontSize": 30, "color": gray}}>&times;</Text>
                             </TouchableOpacity>
 
-                            <FlatList
-                                data={Object.values(items)}
-                                keyExtractor={(item, index) => index}
-                                renderItem={({item}) => (
-                                    <ModalListItem onPress={() => this.selectDeck(item.title, item.id)}>
-                                        <ModalListItemText>{item.title}</ModalListItemText>
-                                    </ModalListItem>
-                                )}
-                            />
+                            {items &&
+
+                                <FlatList
+                                    data={items}
+                                    keyExtractor={(item, index) => index}
+                                    renderItem={({item}) => (
+                                        <ModalListItem onPress={() => this.selectDeck(item.title, item.id)}>
+                                            <ModalListItemText>{item.title}</ModalListItemText>
+                                        </ModalListItem>
+                                    )}
+                                />
+                            }
 
                     </ModalContainer>
 

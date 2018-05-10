@@ -11,7 +11,6 @@ import SingleDeck from '../views/SingleDeck'
 import CreateCard from '../views/CreateCard'
 
 import StudyQuiz from '../views/StudyQuiz'
-import StudyCard from '../views/StudyCard'
 
 
 //Icons

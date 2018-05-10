@@ -67,7 +67,6 @@ const ScoreScreen = ({scores}) => {
 
             <Text>You got <Text style={{fontWeight: 'bold'}}>{accerted.length}</Text> questions out of <Text style={{fontWeight: 'bold'}}>{scores.length}</Text></Text>
 
-
         </Box>
     )
 }

@@ -9,6 +9,15 @@ export const setInitialData = (data) => AsyncStorage.setItem(DATA_STORAGE_KEY, J
 // Get Decks
 export const getDecks = () => AsyncStorage.getItem(DATA_STORAGE_KEY);
 
+// Get Specific Deck
+export const getDeck = (title) => {
+    return AsyncStorage.getItem(DATA_STORAGE_KEY).then(result => {
+        const data = JSON.parse(result)
+        return data[title]
+    });
+}
+
+
 // Add Card
 export function addCardToDeck(title, card) {
     return AsyncStorage.getItem(DATA_STORAGE_KEY).then(result => {

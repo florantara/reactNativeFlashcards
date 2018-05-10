@@ -36,17 +36,18 @@ class StudyQuiz extends Component{
     state = {
         cards: [],
         activeCard: undefined,
+        maxCards: 5,
         scores: [],
         showingFinalScreen: false
     }
 
-    componentWillMount(){
-
-        // If we have a Deck selected
-        // this.props.startQuiz() at deck
-        // if not, it's Random!
-        this.props.randomQuiz()
-        //AsyncStorage.clear()
+    componentDidMount(){
+        // If it's coming From a Deck, start quiz
+        if ( this.props.navigation.state.params ){
+            this.props.deckQuiz(this.props.navigation.state.params)
+        } else {
+            this.props.randomQuiz()
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -58,9 +59,11 @@ class StudyQuiz extends Component{
                 scores: nextProps.quiz.scores
             })
 
-            // If these area already populated, don't refresh.
+            // If there is an Active card, don't refresh these.
             if ( ! this.state.activeCard ){
+
                 this.setState({
+                    maxCards: nextProps.quiz.cards.length,
                     activeCard: this.getCardData(0, nextProps.quiz.cards),
                 })
             }
@@ -69,7 +72,6 @@ class StudyQuiz extends Component{
                     cards: nextProps.quiz.cards,
                 })
             }
-            //console.log(nextProps.quiz.cards)
         }
     }
 
@@ -119,13 +121,14 @@ class StudyQuiz extends Component{
     }
 
     render(){
-        const { activeCard, showingFinalScreen, scores } = this.state
+        const { activeCard, showingFinalScreen, scores, maxCards } = this.state
         return(
             <Layout>
                 { showingFinalScreen ?
                     <ScoreScreen scores={scores}/>
                     :
                     <Card
+                        maxCards={maxCards}
                         cardNumber={activeCard && activeCard.cardNumber}
                         question={activeCard && activeCard.question}
                         displayAnswer={activeCard &&  activeCard.displayAnswer}

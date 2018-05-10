@@ -63,10 +63,12 @@ const SingleDeck = (props) => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <View style={[styles.button,{marginTop: 0}]}>
-                <Play style={styles.buttonIcon}/>
-                <Text style={styles.buttonText}>Start Quiz</Text>
-            </View>
+            <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz', props.navigation.state.params.title)}>
+                <View style={[styles.button,{marginTop: 0}]}>
+                    <Play style={styles.buttonIcon}/>
+                    <Text style={styles.buttonText}>Start Quiz</Text>
+                </View>
+            </TouchableOpacity>
         </Layout>
     )
 }

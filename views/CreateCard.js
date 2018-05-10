@@ -177,7 +177,7 @@ class CreateCard extends Component {
     render(){
         const { inputDeck } = this.state
         const { decks } = this.props
-        //console.log(this.props.decks)
+        console.log(" Create Card this.props.decks -----------" ,this.props.decks)
         return(
             <View style={{flex: 1}}>
 

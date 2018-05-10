@@ -137,7 +137,7 @@ class Card extends Component{
     }
     render(){
 
-        const { question, displayAnswer, cardNumber } = this.props
+        const { question, displayAnswer, cardNumber, maxCards } = this.props
         const frontAnimatedStyle = {
             transform: [
                 { rotateY: this.frontInterpolate }
@@ -155,7 +155,7 @@ class Card extends Component{
         return(
             <View style={{flex: 1,width: '100%', maxHeight: 450}}>
                 <Title style={colorHighlight}>
-                    <Text style={{color: 'white', fontSize: 23}}>{cardNumber} of 5</Text>
+                    <Text style={{color: 'white', fontSize: 23}}>{cardNumber} of {maxCards}</Text>
                 </Title>
                 <View style={{flex: 1}}>
                     <Box style={frontAnimatedStyle}>
@@ -183,9 +183,9 @@ class Card extends Component{
                     <FlipButton onPress={this.flipCard}>
                         <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>
                             { this.state.viewingSide === 'back'?
-                                '<- QUESTION'
+                                'SHOW QUESTION'
                             :
-                                'ANSWER ->'
+                                'SHOW ANSWER'
                             }
                         </Text>
                     </FlipButton>
