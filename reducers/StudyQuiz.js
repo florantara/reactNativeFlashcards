@@ -12,6 +12,9 @@ const quiz = {
     scores: []
 }
 
+// There are 2 Options for Quizes: Random and Deck Specific
+// The Random one, grabs all the cards, and specifies 5 (if there are more than 5 in the app)
+// The Deck one, sets up a singleDeck value that will be used in the DecksScreen
 export function StudyQuiz( state = quiz, action ){
     switch(action.type){
         case START_RANDOM_QUIZ :
@@ -42,7 +45,6 @@ export function StudyQuiz( state = quiz, action ){
         case START_DECK_QUIZ :
             return {
                 ...state,
-                ...state.decks = action.deck,
                 ...state.cards = action.deck[0].cards,
                 ...state.scores = []
 

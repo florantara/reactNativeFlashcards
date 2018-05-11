@@ -3,7 +3,7 @@ import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation'
 import { Animated, Easing } from 'react-native'
 
 // Views:
-import HomeScreen from '../views/HomeScreen'
+import Extras from '../views/Extras'
 import DecksScreen from '../views/DecksScreen'
 import SingleDeck from '../views/SingleDeck'
 import CreateCard from '../views/CreateCard'
@@ -11,7 +11,7 @@ import StudyQuiz from '../views/StudyQuiz'
 
 
 //Icons
-import { Home, Stack } from '../utils/icons'
+import { More, Stack } from '../utils/icons'
 
 
 // Stack for the Decks in the TabBar
@@ -47,20 +47,20 @@ export const DecksStack = StackNavigator(
 // Decks gets the above StackNavigator
 const TabBar = TabNavigator(
     {
-        Home: {
-            screen: HomeScreen
-        },
         Decks: {
             screen: DecksStack
-        }
+        },
+        Extras: {
+            screen: Extras
+        },
     },
     {
         navigationOptions: ({ navigation }) => ({
             tabBarIcon: ({ focused, tintColor }) => {
                 const { routeName } = navigation.state;
                 let iconName;
-                if (routeName === 'Home') {
-                    iconName = <Home focused={focused ? true : null}/>;
+                if (routeName === 'Extras') {
+                    iconName = <More focused={focused ? true : null}/>;
                 } else if (routeName === 'Decks') {
                     iconName = <Stack focused={focused ? true : null}/>;
                 }
@@ -81,7 +81,7 @@ const TabBar = TabNavigator(
 // They maintain context depending on where they where called from
 export default RootNav = StackNavigator(
     {
-        Home: {
+        Decks: {
             screen: TabBar,
             navigationOptions: {
                 header: null

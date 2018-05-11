@@ -45,7 +45,7 @@ export const addScore = (score) => ({
 // Quiz From Specific Deck
 export const startQuizFromDeck = (deck) => ({
     type: START_DECK_QUIZ,
-    deck
+    deck,
 })
 
 export const deckQuiz = (deckTitle) => dispatch =>

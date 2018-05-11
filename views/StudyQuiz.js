@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {  NavigationActions } from 'react-navigation';
 
 // React Native
 import {
@@ -39,14 +40,29 @@ class StudyQuiz extends Component{
         activeCard: undefined,
         maxCards: 5,
         scores: [],
-        showingFinalScreen: false
+        showingFinalScreen: false,
+        fromSingleDeck: false,
+        singleDeckTitle: '',
+        singleDeckColor: ''
     }
 
-    componentDidMount(){
-        // If it's coming From a Deck, start quiz
-        if ( this.props.navigation.state.params ){
-            this.props.deckQuiz(this.props.navigation.state.params)
+    componentWillMount(){
+        // If it's coming From a Deck, start quiz from Deck
+        if ( this.props.navigation.state.params.isSingleDeck ){
+
+            // Dispatch Action
+            this.props.deckQuiz(this.props.navigation.state.params.title)
+
+            // Setup State with Deck info to be used in the ScoreScreen component
+            this.setState({
+                fromSingleDeck: true,
+                singleDeckTitle: this.props.navigation.state.params.title,
+                singleDeckColor: this.props.navigation.state.params.color
+        //
+            })
         } else {
+
+            // Dispatch the Random Quiz
             this.props.randomQuiz()
         }
     }
@@ -75,6 +91,7 @@ class StudyQuiz extends Component{
                 })
             }
         }
+
     }
 
     // Select the card corresponding to the index and return an object to be used in the state.activeCard
@@ -130,14 +147,50 @@ class StudyQuiz extends Component{
         }
     }
 
-    render(){
 
+    // Action Triggered when Play Again button is clicked on the ScoreScreen
+    // As stacknavigators stack, the < Back arrow originally leads to th previous deck
+    // This cleans up the Stack and the "previous" screen is the Decks sccreen
+    // Note: This is V1 of ReactNavigator
+    resetQuiz = () =>{
+
+        let newQuizRoute
+
+        if ( this.props.navigation.state.params ){
+            newQuizRoute = {
+                routeName: 'StudyQuiz',
+                params: this.props.navigation.state.params
+            }
+        } else {
+            newQuizRoute = {
+                routeName: 'StudyQuiz'
+            }
+        }
+
+        const resetAction = NavigationActions.reset({
+            index: 1,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Decks' }),
+              NavigationActions.navigate(newQuizRoute),
+            ],
+        });
+        this.props.navigation.dispatch(resetAction);
+    }
+
+    render(){
         // Get these values from this.state
-        const { activeCard, showingFinalScreen, scores, maxCards } = this.state
+        const { activeCard, showingFinalScreen, scores, maxCards, fromSingleDeck , singleDeckTitle, singleDeckColor} = this.state
         return(
-            <Layout>
+            <Layout blank>
                 { showingFinalScreen ?
-                    <ScoreScreen scores={scores}/>
+                    <ScoreScreen
+                        scores={scores}
+                        resetQuiz={this.resetQuiz}
+                        navigation={this.props.navigation}
+                        isSingleDeck={fromSingleDeck}
+                        singleDeckTitle={singleDeckTitle}
+                        singleDeckColor={singleDeckColor}
+                    />
                     :
                     <Card
                         maxCards={maxCards}

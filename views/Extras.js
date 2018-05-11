@@ -15,7 +15,7 @@ import { Add, Play, Stack } from '../utils/icons'
 import Layout from '../components/Layout'
 
 
-const HomeScreen = (props) => {
+const Extras = (props) => {
     return(
         <Layout>
             <View style={styles.buttonGroup}>
@@ -27,7 +27,7 @@ const HomeScreen = (props) => {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz')}>
+                <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz' , {isSingleDeck: false})}>
                     <View style={[styles.button, {marginBottom: 0}]}>
                         <Play style={styles.buttonIcon}/>
                         <Text style={styles.buttonText}>Random Quiz</Text>
@@ -38,7 +38,7 @@ const HomeScreen = (props) => {
     )
 }
 
-export default HomeScreen
+export default Extras
 
 const styles = StyleSheet.create({
 

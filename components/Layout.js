@@ -5,26 +5,37 @@ import {
     ImageBackground,
 } from 'react-native';
 
-const Layout = ({children, top}) =>{
+const Layout = ({children, top, blank}) =>{
 
     const verticalAlign = {
         justifyContent: top ? 'flex-start' : 'center'
     }
-    return(
-        <ImageBackground
-            source={{uri: 'https://res.cloudinary.com/techflor/image/upload/v1522123593/deskBg.jpg'}}
-            style={{ flex: 1,
-                width: null,
-                height: null,
-            }}
-        >
+
+    if ( blank ){
+        return(
             <View style={[styles.container, verticalAlign ]}>
 
                 {children}
 
             </View>
-        </ImageBackground>
-    )
+            )
+    } else {
+        return(
+            <ImageBackground
+                source={{uri: 'https://res.cloudinary.com/techflor/image/upload/v1522123593/deskBg.jpg'}}
+                style={{ flex: 1,
+                    width: null,
+                    height: null,
+                }}
+                >
+                    <View style={[styles.container, verticalAlign ]}>
+
+                        {children}
+
+                    </View>
+                </ImageBackground>
+            )
+    }
 }
 
 export default Layout

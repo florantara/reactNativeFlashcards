@@ -7,6 +7,7 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
+    KeyboardAvoidingView,
     Alert
 } from 'react-native';
 
@@ -68,49 +69,59 @@ class DecksScreen extends Component{
 
     // Handle navigation to a particular deck (onPress)
     onRequestDeck = (deck) =>{
-        this.props.navigation.navigate("SingleDeck", deck)
+        const newRouteParams = {
+            routeName: 'SingleDeck',
+            params: {
+                title: deck.title,
+                isSingleDeck: true,
+                color: deck.color
+            }
+        }
+        this.props.navigation.navigate(newRouteParams)
     }
 
     render(){
         const { decks } = this.props
         const { creatingDeck } = this.state
         return(
+            <KeyboardAvoidingView style={{flex: 1}} behavior="height" enabled keyboardVerticalOffset={0}>
             <ScrollView contentContainerStyle={{justifyContent: 'center', height: '100%', width: '100%'}}>
-                <Layout>
-                    { decks && Object.values(decks).map( deck => (
-                        <Deck
-                            key={deck.id}
-                            color={deck.color}
-                            title={deck.title}
-                            cards={deck.cards}
-                            onPress={() => this.onRequestDeck(deck)}
-                        />)
-                    )
-                    }
+                    <Layout>
+                        { decks && Object.values(decks).map( deck => (
+                            <Deck
+                                key={deck.id}
+                                color={deck.color}
+                                title={deck.title}
+                                cards={deck.cards}
+                                onPress={() => this.onRequestDeck(deck)}
+                            />)
+                        )
+                        }
 
-                    {creatingDeck &&
-                        <Field
-                            name='newDeckTitle'
-                            placeholder="What's the topic?"
-                            value={this.state.newDeckTitle}
-                            onInputChange={(inputData) => this.onInputChange(inputData)}
-                            isWide
-                            isLastField
-                            solidColor
-                            autoFocus
-                            isSingleLine
-                        />
-                    }
-                    <TouchableOpacity onPress={this.handleCreateDeck}>
+                        {creatingDeck &&
+                            <Field
+                                name='newDeckTitle'
+                                placeholder="What's the topic?"
+                                value={this.state.newDeckTitle}
+                                onInputChange={(inputData) => this.onInputChange(inputData)}
+                                isWide
+                                isLastField
+                                solidColor
+                                autoFocus
+                                isSingleLine
+                            />
+                        }
+                        <TouchableOpacity onPress={this.handleCreateDeck}>
 
 
-                        <Text style={{fontSize: 17}}>
-                            {creatingDeck ? 'DONE' : 'Create Deck'}
-                        </Text>
+                            <Text style={{fontSize: 17}}>
+                                {creatingDeck ? 'DONE' : 'Create Deck'}
+                            </Text>
 
-                    </TouchableOpacity>
-                </Layout>
+                        </TouchableOpacity>
+                    </Layout>
             </ScrollView>
+        </KeyboardAvoidingView>
         )
     }
 

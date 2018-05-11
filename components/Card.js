@@ -46,7 +46,7 @@ const ActionButtonText = styled.Text`
     font-weight: bold;
     font-size: 11px;
 `
-const FlipButton = styled.TouchableOpacity`
+const FlipButton = Animated.createAnimatedComponent(styled.TouchableOpacity`
     height: 45px;
     background: #222;
     border-radius: 5px;
@@ -54,7 +54,7 @@ const FlipButton = styled.TouchableOpacity`
     align-items: center;
     margin-top: 20px;
     width: 100%;
-`
+`)
 
 class Card extends Component{
 
@@ -122,8 +122,7 @@ class Card extends Component{
         Animated.sequence([
             Animated.timing(this.animatedFadeValue, {
                 toValue: 150,
-                duration: 350,
-                delay: 100
+                duration: 300
             }),
             Animated.timing(this.animatedFadeValue, {
                 toValue: 0,
@@ -180,7 +179,7 @@ class Card extends Component{
                         </ActionsBar>
                     </Box>
                 </View>
-                    <FlipButton onPress={this.flipCard}>
+                    <FlipButton style={colorHighlight} onPress={this.flipCard}>
                         <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>
                             { this.state.viewingSide === 'back'?
                                 'SHOW QUESTION'

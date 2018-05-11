@@ -45,23 +45,27 @@ const CardsCount = styled.View`
 
 class SingleDeck extends Component {
 
+    static navigationOptions = ({navigation}) => ({
+        headerTitle: `${navigation.state.params.title} Deck`,
+    })
+
     componentWillMount(){
         this.props.getDecks()
     }
 
-
     render(){
-        const cardsAmount = this.props.deck[0].cards ? this.props.deck[0].cards.length : 0
-        const { title, color } = this.props.navigation.state.params
+
+        const cardsAmount = this.props.deck[0] && this.props.deck[0].cards ? this.props.deck[0].cards.length : 0
+        let { title, color } = this.props.navigation.state.params
         return(
             <Layout top>
-                <Box color={color}>
-                    <Title>{title.trim()}</Title>
+                <Box color={color ? color : 'black'}>
+                    <Title>{title}</Title>
 
                     {cardsAmount === 0 ?
                         <Text>No cards yet. Add the first one!</Text>
                         :
-                        <CardsCount color={color}>
+                        <CardsCount color={color ? color : 'black'}>
                             <Text style={{color: 'white'}}>
                                 {cardsAmount} card{cardsAmount > 1 ? 's' : ''}
                             </Text>
@@ -82,7 +86,7 @@ class SingleDeck extends Component {
 
                 {/* If there aren't cards assigned to this deck, there's no Quiz */}
                 {cardsAmount > 0 &&
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('StudyQuiz', title)}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('StudyQuiz', {isSingleDeck: true, title: title, color: color})}>
                         <View style={[styles.button,{marginTop: 0}]}>
                             <Play style={styles.buttonIcon}/>
                             <Text style={styles.buttonText}>Start Quiz</Text>
@@ -100,15 +104,6 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 export default connect(mapStateToProps, actions)(SingleDeck)
-
-
-// Define the Header Title for this stack screen
-SingleDeck.navigationOptions = ({navigation}) => {
-        return {
-            headerTitle: `${navigation.state.params.title.trim()} Deck`
-        }
-    }
-
 
 const styles = StyleSheet.create({
 
