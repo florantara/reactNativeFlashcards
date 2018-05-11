@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import data from './reducers'
 import thunk from 'redux-thunk'
+import { setLocalNotification } from './utils/notifications'
 
 const store = createStore(
     data,
@@ -16,6 +17,9 @@ const store = createStore(
 import RootNav from './components/RootNav'
 
 export default class App extends Component {
+    componentDidMount() {
+        setLocalNotification()
+    }
     render() {
         //AsyncStorage.clear()
         return (

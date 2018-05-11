@@ -20,7 +20,7 @@ import * as actions from '../actions/StudyQuiz'
 // Extras
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { blue } from '../utils/colors'
-
+import { clearLocalNotification, setLocalNotification } from '../utils/notifications'
 
 class StudyQuiz extends Component{
 
@@ -139,11 +139,12 @@ class StudyQuiz extends Component{
             })
 
 
-        // Otherwise, show the score
+        // SoreScreen
         } else {
             this.setState({
                 showingFinalScreen: true
             })
+            clearLocalNotification().then(setLocalNotification)
         }
     }
 

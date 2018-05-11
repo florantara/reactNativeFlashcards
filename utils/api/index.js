@@ -1,7 +1,7 @@
 
 import { AsyncStorage } from 'react-native'
 
-export const DATA_STORAGE_KEY = 'APP:Data'
+export const DATA_STORAGE_KEY = 'mobileFlashCards:Data'
 
 // Set Initial Data
 export const setInitialData = (data) => AsyncStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(data))
