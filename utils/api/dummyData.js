@@ -2,45 +2,45 @@ export default dummyData = {
     Food: {
         id: 1,
         title: 'Food',
-        color: '#FF33A7',
+        color: '#8A4EA6',
         cards: [
             {
-                question: 'A Moscow Mule is a type of cocktail popularly served in what?',
+                question: 'What is sushi traditionally wrapped in?',
                 answers: {
-                    'right': 'Copper Mug',
+                    'right': 'Seaweed',
                     'wrong': [
-                        'Wood Cup',
-                        'Cocktail Glass'
+                        'Corn',
+                        'Rice'
                     ]
                 }
             },
             {
-                question: 'Celebrity chef Gordon Ramsay opened his first restaurant in what city?',
+                question: 'What ingredient in bread causes it to rise?',
                 answers: {
-                    'right': 'London, England',
+                    'right': 'Yeast',
                     'wrong': [
-                        'New York, USA',
-                        'Paris, France'
+                        'Flour',
+                        'Milk'
                     ]
                 }
             },
             {
-                question: 'Sushi is a type of cuisine that originated in what country?',
+                question: 'What nut is traditionally on the Waldorf salad?',
                 answers: {
-                    'right': 'Japan',
+                    'right': 'Walnuts',
                     'wrong': [
-                        'China',
-                        'Korea'
+                        'Almonds',
+                        'Cheese'
                     ]
                 }
             },
             {
-                question: 'The original Starbucks was established in 1971 in what U.S. city?',
+                question: 'What food is Hummus made from?',
                 answers: {
-                    'right': 'Seattle, Washington',
+                    'right': 'Chickpeas',
                     'wrong': [
-                        'Las Vegas',
-                        'Portland'
+                        'Cheese',
+                        'Avocado'
                     ]
                 }
             }

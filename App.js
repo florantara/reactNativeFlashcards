@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation'
 
-import {AsyncStorage} from 'react-native'
+//import {AsyncStorage} from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import data from './reducers'
