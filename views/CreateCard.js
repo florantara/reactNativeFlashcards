@@ -45,7 +45,6 @@ const SubmitButton = styled.TouchableOpacity`
     width: 100%;
 `
 
-
 class CreateCard extends Component {
     static navigationOptions ={
         title: "New Card",
@@ -66,6 +65,7 @@ class CreateCard extends Component {
         addingToExistingDeck: false
     }
 
+    // Trigger action to populate store/props with decks
     componentWillMount(){
         this.props.getDecks()
     }
@@ -82,7 +82,7 @@ class CreateCard extends Component {
     }
 
     setModalVisible(visible) {
-        // If coming from a Single Deck screen, you can't change the Deck.
+        // If coming from a Single Deck screen, you can't change the Deck. Context.
         if ( ! this.state.addingToExistingDeck ) {
             this.setState({
                 modalVisible: visible
@@ -141,7 +141,21 @@ class CreateCard extends Component {
     onHandleSubmit = () => {
         const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
 
-        if ( inputDeck === '' || inputQuestion === '' || inputCorrectAnswer === '' || inputWrongAnswers.length === 0) {
+        // Check that there are Wrong answers loaded, and that they are not empty
+        let wrongAnswersValid = false
+        if ( inputWrongAnswers.length === 0 ){
+            wrongAnswersValid = false
+        } else {
+             const collectWrongAnswersEmpty = inputWrongAnswers.filter( answer => answer.text === '')
+             if (collectWrongAnswersEmpty.length > 0){
+                 wrongAnswersValid = false
+             } else {
+                  wrongAnswersValid = true
+             }
+        }
+
+        // If there's something missing, show an Alert, otherwise, add card.
+        if ( inputDeck === '' || inputQuestion === '' || inputCorrectAnswer === '' || !wrongAnswersValid) {
             Alert.alert(
                 'Please complete all the fields'
             )
@@ -150,6 +164,8 @@ class CreateCard extends Component {
         }
     }
 
+    // Create Card, show an Alert and go back to previous screen.
+    // which can be either the Homepage or the Deck
     onSubmitCard = () => {
         const { inputDeck, inputQuestion, inputCorrectAnswer, inputWrongAnswers } = this.state
         const { addCard } = this.props
@@ -177,14 +193,13 @@ class CreateCard extends Component {
     render(){
         const { inputDeck } = this.state
         const { decks } = this.props
-        console.log(" Create Card this.props.decks -----------" ,this.props.decks)
         return(
             <View style={{flex: 1}}>
 
 
                 <ScrollView>
                     <Container>
-                        <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled keyboardVerticalOffset={30}>
+                        <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled keyboardVerticalOffset={100}>
 
                             <Field
                                 isSelect
@@ -196,7 +211,7 @@ class CreateCard extends Component {
                                 </Select>
                             </Field>
 
-                            {/* { Select MODAL } */}
+                            {/* { Select custom MODAL } */}
 
                             <ModalSelectDecks
                                 data={decks}
@@ -208,7 +223,7 @@ class CreateCard extends Component {
                             <Field
                                 name='inputQuestion'
                                 label="Question"
-                                placeholder="What is JavaScript?"
+                                placeholder="e.g.: What is JavaScript?"
                                 value={this.state.inputQuestion}
                                 onInputChange={(inputData) => this.onInputChange(inputData)}
                             >
@@ -217,7 +232,7 @@ class CreateCard extends Component {
                             <Field
                                 name='inputCorrectAnswer'
                                 label="Correct Answer"
-                                placeholder="A computer programming language"
+                                placeholder="e.g.: A computer programming language"
                                 value={this.state.inputCorrectAnswer}
                                 onInputChange={(inputData) => this.onInputChange(inputData)}
                             >

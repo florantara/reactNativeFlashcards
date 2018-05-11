@@ -22,6 +22,7 @@ import { blue } from '../utils/colors'
 
 
 class StudyQuiz extends Component{
+
     static navigationOptions ={
         title: "Study Quiz",
         headerTintColor: 'white',
@@ -59,14 +60,15 @@ class StudyQuiz extends Component{
                 scores: nextProps.quiz.scores
             })
 
-            // If there is an Active card, don't refresh these.
+            // If there is an Active card already, don't refresh these.
             if ( ! this.state.activeCard ){
-
                 this.setState({
                     maxCards: nextProps.quiz.cards.length,
                     activeCard: this.getCardData(0, nextProps.quiz.cards),
                 })
             }
+
+            // If no cards yet in the component, setup cards
             if ( this.state.cards.length === 0 ){
                 this.setState({
                     cards: nextProps.quiz.cards,
@@ -75,8 +77,8 @@ class StudyQuiz extends Component{
         }
     }
 
+    // Select the card corresponding to the index and return an object to be used in the state.activeCard
     getCardData = (index, cards) => {
-
         if ( cards[index] && (index !== cards.length) ){
             return {
                 cardNumber: index + 1,
@@ -86,7 +88,9 @@ class StudyQuiz extends Component{
             }
         }
         return false
-}
+    }
+
+    // Mix all answers, right and wrong, and get just 1 to show
     getOneAnswer = ( right, wrong ) => {
         const answers = [
             right,
@@ -94,6 +98,8 @@ class StudyQuiz extends Component{
         ]
         return answers[Math.floor(Math.random()*answers.length)]
     }
+
+    // Add Vote to Scores list and move on
     voteCard = (vote) => {
         const { displayAnswer, rightAnswer } = this.state.activeCard
         let score
@@ -108,12 +114,16 @@ class StudyQuiz extends Component{
 
     nextCard(){
         const nextCard = this.getCardData( this.state.activeCard.cardNumber , this.state.cards);
+
+        // If there is a next card...
         if ( nextCard ) {
             this.setState({
                 activeCard: nextCard
             })
+
+
+        // Otherwise, show the score
         } else {
-            // trigger Calculate Score
             this.setState({
                 showingFinalScreen: true
             })
@@ -121,6 +131,8 @@ class StudyQuiz extends Component{
     }
 
     render(){
+
+        // Get these values from this.state
         const { activeCard, showingFinalScreen, scores, maxCards } = this.state
         return(
             <Layout>
@@ -135,7 +147,6 @@ class StudyQuiz extends Component{
                         onSubmitVote={(vote) => this.voteCard(vote)}
                     />
                 }
-
             </Layout>
         )
     }

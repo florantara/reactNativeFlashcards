@@ -1,43 +1,113 @@
 export default dummyData = {
-    React: {
+    Food: {
         id: 1,
-        title: 'React',
+        title: 'Food',
         color: '#FF33A7',
         cards: [
             {
-                question: 'What is React?',
+                question: 'A Moscow Mule is a type of cocktail popularly served in what?',
                 answers: {
-                    'right': 'A library for managing user interfaces',
+                    'right': 'Copper Mug',
                     'wrong': [
-                        'A JavaScript framework',
-                        'A UI JavaScript Kit'
+                        'Wood Cup',
+                        'Cocktail Glass'
                     ]
                 }
             },
             {
-                question: 'Where do you make Ajax requests in React?',
+                question: 'Celebrity chef Gordon Ramsay opened his first restaurant in what city?',
                 answers: {
-                    'right': 'The componentDidMount lifecycle event.',
+                    'right': 'London, England',
                     'wrong': [
-                        'In the render lifecycle event.',
-                        'In a stateless component.'
+                        'New York, USA',
+                        'Paris, France'
+                    ]
+                }
+            },
+            {
+                question: 'Sushi is a type of cuisine that originated in what country?',
+                answers: {
+                    'right': 'Japan',
+                    'wrong': [
+                        'China',
+                        'Korea'
+                    ]
+                }
+            },
+            {
+                question: 'The original Starbucks was established in 1971 in what U.S. city?',
+                answers: {
+                    'right': 'Seattle, Washington',
+                    'wrong': [
+                        'Las Vegas',
+                        'Portland'
                     ]
                 }
             }
         ]
     },
-    JavaScript: {
+    Disney: {
         id: 2,
-        title: 'JavaScript',
+        title: 'Disney',
         color: '#FE4781',
         cards: [
             {
-                question: 'What is a closure?',
+                question: 'What was Walt Disney’s middle name?',
                 answers: {
-                    'right': 'The combination of a function and the lexical environment within which that function was declared.',
+                    'right': 'Elias',
                     'wrong': [
-                        'A function that calls itself until it doesn\'t anymore',
-                        'The global scope of a function.'
+                        'Jackson',
+                        'Austin'
+                    ]
+                }
+            },
+            {
+                question: 'What is the name of the Disney cartoon character that is the girlfriend to Donald Duck?',
+                answers: {
+                    'right': 'Daisy Duck',
+                    'wrong': [
+                        'Dolly Duck',
+                        'Diana Duck'
+                    ]
+                }
+            },
+            {
+                question: 'In Disney’s “The Little Mermaid” what is the name of the human that Ariel falls in love with?',
+                answers: {
+                    'right': 'Prince Eric',
+                    'wrong': [
+                        'Prince Robin',
+                        'Prince Charles'
+                    ]
+                }
+            },
+            {
+                question: 'What is the name of Mickey Mouse´s dog?',
+                answers: {
+                    'right': 'Pluto',
+                    'wrong': [
+                        'Fatiga',
+                        'Bilbo'
+                    ]
+                }
+            },
+            {
+                question: 'In the Disney movie “Beauty and the Beast”, what is the name of Gaston’s bumbling sidekick?',
+                answers: {
+                    'right': 'LeFou',
+                    'wrong': [
+                        'Dr. Fou',
+                        'Mr. Fou'
+                    ]
+                }
+            },
+            {
+                question: 'Spaceship Earth is the icon for what amusement park that features technological innovation and international culture?',
+                answers: {
+                    'right': 'Epcot',
+                    'wrong': [
+                        'Animal Kingdom',
+                        'Magic Kingdom'
                     ]
                 }
             }
@@ -70,7 +140,7 @@ export default dummyData = {
                 }
             },
             {
-                question: 'What is the name for the branch of mathematics dealing with lengths and angles of triangles.',
+                question: 'What is the name for the branch of mathematics dealing with lengths and angles of triangles?',
                 answers: {
                     'right': 'Trigonometry',
                     'wrong': ['Geometry', 'Alchemy']

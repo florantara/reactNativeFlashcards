@@ -28,10 +28,10 @@ const Score = styled.Text`
 const ScoreScreen = ({scores}) => {
 
     const accerted = scores.filter( score => score === 1)
-    const score = (accerted.length / scores.length) * 100
+    const score = Math.round((accerted.length / scores.length) * 100)
 
     getEmoticon = () => {
-        if ( score < 7 ){
+        if ( score < 70 ){
             return (
                 <Image
                     style={{width: 100, height: 100}}
@@ -39,7 +39,7 @@ const ScoreScreen = ({scores}) => {
                 />
             )
         }
-        if ( score >= 7 ){
+        if ( score >= 70 && score < 100 ){
             return (
                 <Image
                     style={{width: 100, height: 100}}
@@ -47,7 +47,7 @@ const ScoreScreen = ({scores}) => {
                 />
             )
         }
-        if ( score === 10 ){
+        if ( score === 100 ){
             return (
                 <Image
                     style={{width: 100, height: 100}}

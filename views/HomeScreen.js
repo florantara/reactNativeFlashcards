@@ -1,5 +1,6 @@
 import React from 'react'
-import { StackNavigator } from 'react-navigation'
+
+// React Native
 import {
     Text,
     View,
@@ -7,7 +8,10 @@ import {
     TouchableOpacity
 } from 'react-native'
 
+// Extras
 import { Add, Play, Stack } from '../utils/icons'
+
+// Components
 import Layout from '../components/Layout'
 
 
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
         height: 60,
         paddingRight: 20,
         paddingLeft: 20,
-        width: 250,
+        width: 200,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,

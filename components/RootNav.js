@@ -1,15 +1,12 @@
 import React from 'react'
-import { TabNavigator, TabBarBottom, StackNavigator, SwitchNavigator } from 'react-navigation'
+import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation'
 import { Animated, Easing } from 'react-native'
 
 // Views:
 import HomeScreen from '../views/HomeScreen'
-
 import DecksScreen from '../views/DecksScreen'
 import SingleDeck from '../views/SingleDeck'
-
 import CreateCard from '../views/CreateCard'
-
 import StudyQuiz from '../views/StudyQuiz'
 
 
@@ -17,6 +14,7 @@ import StudyQuiz from '../views/StudyQuiz'
 import { Home, Stack } from '../utils/icons'
 
 
+// Stack for the Decks in the TabBar
 export const DecksStack = StackNavigator(
     {
         Decks: {
@@ -45,6 +43,8 @@ export const DecksStack = StackNavigator(
 
 // TabBar
 // Not all screens have it, so it gets added into a StackNavigator
+// Home gets a Component
+// Decks gets the above StackNavigator
 const TabBar = TabNavigator(
     {
         Home: {
@@ -76,7 +76,9 @@ const TabBar = TabNavigator(
 )
 
 
-
+// Define the Main navigation
+// Create and StudyQuiz are Standalone screens
+// They maintain context depending on where they where called from
 export default RootNav = StackNavigator(
     {
         Home: {

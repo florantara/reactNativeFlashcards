@@ -28,6 +28,7 @@ export function StudyQuiz( state = quiz, action ){
                 ...state,
                 ...state.cards = selectedCards,
                 ...state.decks = action.decks,
+                ...state.scores = []
 
             }
         case ADD_SCORE :
@@ -42,7 +43,9 @@ export function StudyQuiz( state = quiz, action ){
             return {
                 ...state,
                 ...state.decks = action.deck,
-                ...state.cards = action.deck[0].cards
+                ...state.cards = action.deck[0].cards,
+                ...state.scores = []
+
             }
         default:
             return state

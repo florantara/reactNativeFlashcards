@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 // React Native
 import {
@@ -15,6 +15,11 @@ import Layout from '../components/Layout'
 import styled from 'styled-components/native'
 import { Add, Play} from '../utils/icons'
 
+// Store
+import { connect } from 'react-redux'
+import * as actions from '../actions/Decks'
+
+// Styled Components
 const Title = styled.Text`
     font-size: 25px;
     margin-bottom: 20px;
@@ -38,43 +43,66 @@ const CardsCount = styled.View`
     border-radius: 5px;
 `
 
-const SingleDeck = (props) => {
-    return(
-        <Layout top>
-            <Box color={props.navigation.state.params.color}>
-                <Title>{props.navigation.state.params.title.trim()}</Title>
+class SingleDeck extends Component {
 
-                {props.navigation.state.params.cards.length === 0 ?
-                    <Text>No cards yet. Add the first one!</Text>
-                :
-                    <CardsCount color={props.navigation.state.params.color}>
-                        <Text style={{color: 'white'}}>
-                            {props.navigation.state.params.cards.length} card{props.navigation.state.params.cards.length > 1 ? 's' : ''}
+    componentWillMount(){
+        this.props.getDecks()
+    }
+
+
+    render(){
+        const cardsAmount = this.props.deck[0].cards ? this.props.deck[0].cards.length : 0
+        const { title, color } = this.props.navigation.state.params
+        return(
+            <Layout top>
+                <Box color={color}>
+                    <Title>{title.trim()}</Title>
+
+                    {cardsAmount === 0 ?
+                        <Text>No cards yet. Add the first one!</Text>
+                        :
+                        <CardsCount color={color}>
+                            <Text style={{color: 'white'}}>
+                                {cardsAmount} card{cardsAmount > 1 ? 's' : ''}
+                            </Text>
+                        </CardsCount>
+                    }
+                </Box>
+
+
+                {/* Go to the CreateCard screen and pass the title of the deck to prepopulate the Deck Dropdown */}
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Create', title)}>
+                    <View style={styles.button}>
+                        <Add style={styles.buttonIcon}/>
+                        <Text style={styles.buttonText}>
+                            Add Card
                         </Text>
-                    </CardsCount>
-                }
-            </Box>
+                    </View>
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => props.navigation.navigate('Create', props.navigation.state.params.title)}>
-                <View style={styles.button}>
-                    <Add style={styles.buttonIcon}/>
-                    <Text style={styles.buttonText}>
-                        Add Card
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.navigation.navigate('StudyQuiz', props.navigation.state.params.title)}>
-                <View style={[styles.button,{marginTop: 0}]}>
-                    <Play style={styles.buttonIcon}/>
-                    <Text style={styles.buttonText}>Start Quiz</Text>
-                </View>
-            </TouchableOpacity>
-        </Layout>
-    )
+                {/* If there aren't cards assigned to this deck, there's no Quiz */}
+                {cardsAmount > 0 &&
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('StudyQuiz', title)}>
+                        <View style={[styles.button,{marginTop: 0}]}>
+                            <Play style={styles.buttonIcon}/>
+                            <Text style={styles.buttonText}>Start Quiz</Text>
+                        </View>
+                    </TouchableOpacity>
+                }
+            </Layout>
+        )
+    }
 }
 
-export default SingleDeck
+const mapStateToProps = (state, ownProps) => ({
+    deck: Object.values(state.decks).filter( deck => deck.title === ownProps.navigation.state.params.title)
+})
 
+
+export default connect(mapStateToProps, actions)(SingleDeck)
+
+
+// Define the Header Title for this stack screen
 SingleDeck.navigationOptions = ({navigation}) => {
         return {
             headerTitle: `${navigation.state.params.title.trim()} Deck`

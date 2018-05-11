@@ -7,8 +7,7 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    Alert,
-    AsyncStorage
+    Alert
 } from 'react-native';
 
 // Components
@@ -30,9 +29,9 @@ class DecksScreen extends Component{
 
     componentWillMount(){
         this.props.getDecks()
-        //AsyncStorage.clear()
     }
 
+    // When the "Create Deck" button is clicked, enable Deck creation:
     handleCreateDeck = () => {
         this.setState(
             { creatingDeck: !this.state.creatingDeck },
@@ -46,6 +45,7 @@ class DecksScreen extends Component{
         )
     }
 
+    // If there's a Deck to save, prepare object to send to api, and trigger it:
     onSaveDeck = () => {
         const newDeck = {
             title: this.state.newDeckTitle,
@@ -59,12 +59,14 @@ class DecksScreen extends Component{
 
     }
 
+    // When the input value changes:
     onInputChange = ({value, name}) => {
         this.setState({
             [name]: value
         })
     }
 
+    // Handle navigation to a particular deck (onPress)
     onRequestDeck = (deck) =>{
         this.props.navigation.navigate("SingleDeck", deck)
     }
@@ -72,7 +74,6 @@ class DecksScreen extends Component{
     render(){
         const { decks } = this.props
         const { creatingDeck } = this.state
-        //console.log(decks)
         return(
             <ScrollView contentContainerStyle={{justifyContent: 'center', height: '100%', width: '100%'}}>
                 <Layout>
@@ -119,13 +120,5 @@ class DecksScreen extends Component{
 const mapStateToProps = state => ({
     decks: state.decks
 })
-
-// function mapStateToProps(state) {
-//  console.log('mapStateToProps', state)
-//
-//   return {
-//     decks: state.decks
-//   }
-// }
 
 export default connect(mapStateToProps, actions)(DecksScreen)
